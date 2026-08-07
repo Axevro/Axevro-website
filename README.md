@@ -59,6 +59,9 @@ Docker · GitHub Actions · AWS · Authentication · SEO
 | `/services/authentication` | Authentication |
 | `/services/seo` | SEO |
 | `/contact` | Contact form |
+| `/privacy-policy` | Privacy Policy |
+| `/terms-and-conditions` | Terms & Conditions |
+| `/cookies-policy` | Cookies Policy |
 
 ---
 
@@ -161,7 +164,7 @@ npm run build
 # Deploy the contents of dist/
 ```
 
-For SPA hosting, configure the host to fallback unknown paths to `index.html` so client routes (`/contact`, `/services/*`) resolve correctly.
+For SPA hosting, configure the host to fallback unknown paths to `index.html` so client routes (`/contact`, `/services/*`, legal pages) resolve correctly.
 
 ---
 

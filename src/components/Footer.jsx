@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
+import { getWhatsAppUrl } from '../data/contact'
 
 const quickLinks = [
   { label: 'About Us', to: '/#about' },
@@ -86,16 +87,34 @@ export default function Footer() {
             Contact
           </h4>
           <a
-            href="mailto:hello@axevro.com"
-            className="mb-3 block text-sm text-[#9BA0A8] transition-colors hover:text-green-bright"
+            href="mailto:axevro9@gmail.com"
+            className="mb-3 block text-sm font-medium text-green-bright transition-colors hover:text-gold-bright hover:underline"
           >
-            hello@axevro.com
+            axevro9@gmail.com
           </a>
           <a
-            href="tel:+10000000000"
-            className="mb-3 block text-sm text-[#9BA0A8] transition-colors hover:text-green-bright"
+            href="tel:+917084788119"
+            className="mb-3 block text-sm font-medium text-green-bright transition-colors hover:text-gold-bright hover:underline"
           >
-            +1 (000) 000-0000
+            7084788119
+            <span className="ml-2 font-mono text-[10px] tracking-[1px] text-gold-bright/80 uppercase">
+              Primary
+            </span>
+          </a>
+          <a
+            href="tel:+919693174749"
+            className="mb-3 block text-sm font-medium text-green-bright transition-colors hover:text-gold-bright hover:underline"
+          >
+            9693174749
+          </a>
+          <a
+            href={getWhatsAppUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-[#25D366] transition-colors hover:text-[#1ebe57] hover:underline"
+          >
+            <span className="material-symbols-outlined text-[16px]">chat</span>
+            WhatsApp
           </a>
           <Link
             to="/contact"
@@ -109,16 +128,16 @@ export default function Footer() {
 
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 border-t border-line-dark px-6 py-6 text-[13px] text-[#63676F] md:px-8">
         <div>© 2026 Axevro. All rights reserved.</div>
-        <div className="flex flex-wrap gap-2">
-          <Link to="/#cta" className="hover:text-white">
+        <div className="flex flex-wrap gap-x-2 gap-y-1">
+          <Link to="/privacy-policy" className="hover:text-white">
             Privacy Policy
           </Link>
-          <span>·</span>
-          <Link to="/#cta" className="hover:text-white">
+          <span className="hidden sm:inline">·</span>
+          <Link to="/terms-and-conditions" className="hover:text-white">
             Terms &amp; Conditions
           </Link>
-          <span>·</span>
-          <Link to="/#cta" className="hover:text-white">
+          <span className="hidden sm:inline">·</span>
+          <Link to="/cookies-policy" className="hover:text-white">
             Cookies Policy
           </Link>
         </div>

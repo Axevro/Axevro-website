@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { getWhatsAppUrl } from '../data/contact'
 
 const initialForm = {
   name: '',
@@ -123,22 +124,57 @@ export default function Contact() {
 
               <div className="mt-8 space-y-5">
                 <a
-                  href="mailto:hello@axevro.com"
-                  className="flex items-center gap-3 text-[15px] text-ink-soft transition-colors hover:text-green"
+                  href="mailto:axevro9@gmail.com"
+                  className="flex items-center gap-3 text-[15px] font-medium text-green transition-colors hover:text-green-deep hover:underline"
                 >
                   <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
                     <span className="material-symbols-outlined text-[20px]">mail</span>
                   </span>
-                  hello@axevro.com
+                  axevro9@gmail.com
                 </a>
                 <a
-                  href="tel:+10000000000"
-                  className="flex items-center gap-3 text-[15px] text-ink-soft transition-colors hover:text-green"
+                  href="tel:+917084788119"
+                  className="flex items-center gap-3 text-[15px] font-medium text-green transition-colors hover:text-green-deep hover:underline"
                 >
                   <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
                     <span className="material-symbols-outlined text-[20px]">call</span>
                   </span>
-                  +1 (000) 000-0000
+                  <span className="flex flex-col leading-tight">
+                    <span>7084788119</span>
+                    <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gold-deep uppercase">
+                      Primary
+                    </span>
+                  </span>
+                </a>
+                <a
+                  href="tel:+919693174749"
+                  className="flex items-center gap-3 text-[15px] font-medium text-green transition-colors hover:text-green-deep hover:underline"
+                >
+                  <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
+                    <span className="material-symbols-outlined text-[20px]">call</span>
+                  </span>
+                  <span className="flex flex-col leading-tight">
+                    <span>9693174749</span>
+                    <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gray uppercase">
+                      Alternate
+                    </span>
+                  </span>
+                </a>
+                <a
+                  href={getWhatsAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-[15px] font-medium text-[#128C7E] transition-colors hover:text-[#075E54] hover:underline"
+                >
+                  <span className="inline-flex h-10 w-10 items-center justify-center border border-[#25D366]/40 bg-[#25D366]/12 text-[#128C7E]">
+                    <span className="material-symbols-outlined text-[20px]">chat</span>
+                  </span>
+                  <span className="flex flex-col leading-tight">
+                    <span>WhatsApp us</span>
+                    <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gray uppercase">
+                      9693174749
+                    </span>
+                  </span>
                 </a>
                 <div className="flex items-center gap-3 text-[15px] text-ink-soft">
                   <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
