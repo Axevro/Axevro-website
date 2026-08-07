@@ -1,67 +1,46 @@
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-
-const steps = [
-  {
-    step: 'STEP 01',
-    name: 'Discovery & Requirement Analysis',
-    desc: 'Understanding your goals, users, and constraints',
-  },
-  {
-    step: 'STEP 02',
-    name: 'Planning & UI/UX Design',
-    desc: 'Wireframes and interactive prototypes before code',
-  },
-  {
-    step: 'STEP 03',
-    name: 'Development',
-    desc: 'Sprint-based build across frontend, backend, and infra',
-  },
-  {
-    step: 'STEP 04',
-    name: 'CI/CD & Cloud Deployment',
-    desc: 'Docker builds, GitHub Actions pipelines, and AWS production rollout',
-  },
-  {
-    step: 'STEP 05',
-    name: 'Maintenance',
-    desc: 'Monitoring, updates, and ongoing support',
-  },
-]
+import SectionHeading from './SectionHeading'
+import { processSteps } from '../data/process'
+import { easeOut } from '../lib/motion'
 
 export default function Process() {
   return (
-    <section id="process" className="py-[100px]">
-      <div className="mx-auto max-w-[1180px] px-6 md:px-8">
-        <div className="mb-14 max-w-[640px]">
-          <div className="mb-4 flex items-center gap-2.5 font-mono text-xs tracking-[1.5px] text-gold-deep uppercase">
-            <span className="block h-[1.5px] w-[22px] bg-[linear-gradient(90deg,var(--color-gold),var(--color-green))]" />
-            How We Work
-          </div>
-          <h2 className="font-display text-[clamp(28px,3.4vw,40px)] leading-[1.15] font-semibold tracking-[-0.8px]">
-            A process built to remove guesswork
-          </h2>
-        </div>
+    <section id="process" className="py-14 sm:py-20 md:py-[100px]">
+      <div className="mx-auto max-w-[1180px] px-4 sm:px-6 md:px-8">
+        <SectionHeading
+          tag="How We Work"
+          title="A process built to remove guesswork"
+        />
 
-        <div className="mt-2.5 flex flex-col">
-          {steps.map((item, index) => (
+        <div className="flex flex-col border-t border-line">
+          {processSteps.map((item, index) => (
             <motion.div
-              key={item.step}
-              initial={{ opacity: 0, x: -10 }}
+              key={item.slug}
+              initial={{ opacity: 0, x: -16 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.35, delay: index * 0.05 }}
-              className="group grid grid-cols-[70px_1fr_28px] items-center gap-5 border-t border-line py-7 transition-[padding] duration-200 last:border-b hover:pl-2.5 sm:grid-cols-[90px_1fr_40px] sm:gap-7"
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.4, delay: index * 0.05, ease: easeOut }}
             >
-              <div className="font-mono text-[13px] text-gold-deep">{item.step}</div>
-              <div>
-                <div className="font-display text-[19px] font-semibold">{item.name}</div>
-                <span className="mt-1 block font-body text-[14.5px] font-normal text-gray">
-                  {item.desc}
+              <Link
+                to={`/process/${item.slug}`}
+                className="group grid grid-cols-[56px_1fr_24px] items-start gap-3 border-b border-line py-5 transition-all duration-200 hover:bg-bg-alt/70 hover:pl-1 sm:grid-cols-[90px_1fr_40px] sm:items-center sm:gap-7 sm:py-7 sm:hover:pl-2"
+              >
+                <div className="font-mono text-[11px] text-gold-deep sm:text-[13px]">
+                  {item.step}
+                </div>
+                <div className="min-w-0">
+                  <div className="font-display text-[16px] font-semibold transition-colors group-hover:text-green-deep sm:text-[19px]">
+                    {item.name}
+                  </div>
+                  <span className="mt-1 block text-[13px] leading-snug text-gray sm:text-[14.5px]">
+                    {item.desc}
+                  </span>
+                </div>
+                <span className="material-symbols-outlined mt-0.5 text-[18px] text-gray-light transition-all group-hover:translate-x-1 group-hover:text-green sm:mt-0">
+                  arrow_forward
                 </span>
-              </div>
-              <span className="material-symbols-outlined text-[18px] text-gray-light transition-all group-hover:translate-x-1 group-hover:text-green">
-                arrow_forward
-              </span>
+              </Link>
             </motion.div>
           ))}
         </div>

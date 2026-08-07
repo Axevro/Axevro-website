@@ -1,130 +1,264 @@
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { toast } from 'sonner'
-import Logo from './Logo'
+import { easeOut, staggerContainer, fadeUp } from '../lib/motion'
 
 const stats = [
-  { num: '120', suffix: '+', label: 'Projects Delivered' },
-  { num: '98', suffix: '%', label: 'Client Retention' },
-  { num: '30', suffix: '+', label: 'Technologies Used' },
-  { num: '24', suffix: '/7', label: 'Support & Monitoring' },
+  { num: '120', suffix: '+', label: 'Projects delivered' },
+  { num: '98', suffix: '%', label: 'Client retention' },
+  { num: '30', suffix: '+', label: 'Technologies' },
+  { num: '24', suffix: '/7', label: 'Support' },
 ]
+
+const fadeUpCustom = {
+  hidden: { opacity: 0, y: 22 },
+  show: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, delay, ease: easeOut },
+  }),
+}
 
 export default function Hero() {
   return (
-    <section id="home" className="relative overflow-hidden bg-black pt-[104px] text-white">
-      <svg
-        className="pointer-events-none absolute top-[60px] right-[-6%] z-[1] h-[640px] w-[640px] opacity-90"
+    <section
+      id="home"
+      className="relative isolate overflow-hidden bg-black text-white"
+    >
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(900px 480px at 12% -10%, rgba(31,157,85,0.18), transparent 55%), radial-gradient(700px 420px at 92% 8%, rgba(201,162,39,0.14), transparent 50%), radial-gradient(600px 360px at 70% 100%, rgba(11,61,44,0.35), transparent 60%)',
+        }}
+      />
+      <motion.div
+        className="pointer-events-none absolute -top-24 left-1/4 h-64 w-64 rounded-full bg-green/20 blur-[100px]"
+        animate={{ opacity: [0.35, 0.55, 0.35], scale: [1, 1.12, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="pointer-events-none absolute right-0 bottom-0 h-72 w-72 rounded-full bg-gold/15 blur-[110px]"
+        animate={{ opacity: [0.25, 0.45, 0.25], scale: [1, 1.08, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.9) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.9) 1px, transparent 1px)',
+          backgroundSize: '72px 72px',
+          maskImage:
+            'linear-gradient(180deg, rgba(0,0,0,0.7), transparent 85%)',
+        }}
+      />
+
+      <motion.svg
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1.1, ease: easeOut }}
+        className="pointer-events-none absolute top-[8%] right-[-18%] z-0 hidden h-[68vmin] w-[68vmin] sm:right-[-12%] md:block lg:right-[-4%]"
         viewBox="0 0 640 640"
         fill="none"
         aria-hidden="true"
       >
-        <path
-          d="M120 460 C260 380 420 280 560 160"
-          stroke="url(#hg)"
-          strokeWidth="46"
+        <motion.path
+          d="M90 500 C250 390 400 270 560 140"
+          stroke="url(#heroSwoosh)"
+          strokeWidth="38"
           strokeLinecap="round"
+          opacity="0.85"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 1.6, delay: 0.3, ease: easeOut }}
         />
         <defs>
-          <linearGradient id="hg" x1="120" y1="460" x2="560" y2="160">
-            <stop stopColor="#0B3D2C" stopOpacity="0.2" />
-            <stop offset="0.5" stopColor="#1F9D55" stopOpacity="0.55" />
-            <stop offset="1" stopColor="#4ADE80" stopOpacity="0.75" />
+          <linearGradient id="heroSwoosh" x1="90" y1="500" x2="560" y2="140">
+            <stop stopColor="#0B3D2C" stopOpacity="0.15" />
+            <stop offset="0.45" stopColor="#1F9D55" stopOpacity="0.45" />
+            <stop offset="1" stopColor="#E8C468" stopOpacity="0.55" />
           </linearGradient>
         </defs>
-      </svg>
+      </motion.svg>
 
-      <div className="relative z-[2] mx-auto max-w-[1180px] px-6 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-          className="mb-7"
-          style={{ display: 'block' }}
-        >
-          <Logo size="lg" inverted />
-          <p
-            className="mt-3 font-mono text-[11px] tracking-[0.18em] text-gold-bright uppercase md:text-[12px]"
-          >
-            Building Digital Excellence
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.05 }}
-          className="mb-7 inline-flex items-center gap-2.5 rounded-[20px] border border-[rgba(201,162,39,0.4)] px-3.5 py-1.5 font-mono text-[12.5px] tracking-[1.5px] text-gold-bright uppercase"
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-green-bright" />
-          Web &amp; Mobile Product Studio
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.1 }}
-          className="font-display max-w-[800px] text-[clamp(38px,5.4vw,66px)] leading-[1.06] font-semibold tracking-[-1.5px]"
-        >
-          Building digital
-          <br />
-          products with{' '}
-          <span className="text-accent-gradient">precision &amp; excellence</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.18 }}
-          className="mt-[26px] max-w-[540px] text-lg leading-[1.65] text-[#A8ACB4]"
-        >
-          Axevro designs and engineers websites, apps, and platforms for teams who
-          need to ship fast without cutting corners — from first wireframe to
-          Dockerized AWS deployment with GitHub Actions.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.26 }}
-          className="mt-[38px] flex flex-wrap items-center gap-4"
-        >
-          <button
-            type="button"
-            onClick={() => toast.success('Thanks — we will get back within 48 hours.')}
-            className="inline-flex items-center gap-2.5 rounded-[2px] border border-gold bg-gold px-7 py-[15px] text-[15px] font-bold text-black transition-all hover:-translate-y-px hover:border-gold-bright hover:bg-gold-bright"
-          >
-            Start a Project
-            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-          </button>
-          <a
-            href="#portfolio"
-            className="rounded-[2px] border-[1.5px] border-white/25 px-6 py-[15px] text-[15px] font-semibold text-white transition-colors hover:border-green-bright hover:text-green-bright"
-          >
-            View Our Work
-          </a>
-        </motion.div>
-
-        <div className="mt-[88px] flex flex-wrap border-t border-white/12">
-          {stats.map((stat, i) => (
+      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-64px)] max-w-[1180px] flex-col justify-center px-4 pt-20 pb-8 sm:min-h-[calc(100svh-72px)] sm:px-6 sm:pt-24 sm:pb-10 md:px-8 md:pt-28 md:pb-14">
+        <div className="grid items-center gap-10 sm:gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+          <div className="max-w-2xl">
             <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.35 + i * 0.06 }}
-              className={`flex-1 basis-1/2 py-[22px] md:basis-auto ${
-                i % 2 === 0 ? 'border-r border-white/12' : ''
-              } md:border-r md:border-white/12 md:last:border-r-0`}
+              custom={0.05}
+              variants={fadeUpCustom}
+              initial="hidden"
+              animate="show"
+              className="mb-5 flex items-center gap-3 sm:mb-7"
             >
-              <div className="font-mono text-[28px] font-medium">
-                <span className="text-gold-bright">{stat.num}</span>
-                {stat.suffix}
-              </div>
-              <div className="mt-1.5 text-[12.5px] tracking-[0.2px] text-[#8B8F97]">
-                {stat.label}
-              </div>
+              <motion.span
+                className="h-px w-8 origin-left sm:w-10"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                style={{
+                  background:
+                    'linear-gradient(90deg, var(--color-gold), var(--color-green))',
+                }}
+              />
+              <span className="font-mono text-[10px] tracking-[0.2em] text-gold-bright uppercase sm:text-[12px] sm:tracking-[0.22em]">
+                Building Digital Excellence
+              </span>
             </motion.div>
-          ))}
+
+            <motion.p
+              custom={0.12}
+              variants={fadeUpCustom}
+              initial="hidden"
+              animate="show"
+              className="font-display mb-3 text-[12px] font-semibold tracking-[0.24em] text-white/70 uppercase sm:mb-4 sm:text-sm sm:tracking-[0.28em]"
+            >
+              Axevro
+            </motion.p>
+
+            <motion.h1
+              custom={0.18}
+              variants={fadeUpCustom}
+              initial="hidden"
+              animate="show"
+              className="font-display text-[clamp(2.1rem,7.5vw,4.35rem)] leading-[1.06] font-semibold tracking-[-0.04em] text-white"
+            >
+              Digital products
+              <br className="hidden sm:block" /> crafted with{' '}
+              <span className="text-accent-gradient">precision</span>
+            </motion.h1>
+
+            <motion.p
+              custom={0.28}
+              variants={fadeUpCustom}
+              initial="hidden"
+              animate="show"
+              className="mt-5 max-w-[34rem] text-[14.5px] leading-[1.75] text-[#A7ADB6] sm:mt-6 sm:text-lg sm:leading-[1.7]"
+            >
+              We design and engineer websites, apps, and cloud platforms for teams
+              who need to ship with confidence — from strategy to secure
+              production.
+            </motion.p>
+
+            <motion.div
+              custom={0.38}
+              variants={fadeUpCustom}
+              initial="hidden"
+              animate="show"
+              className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:gap-4"
+            >
+              <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  to="/contact"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-gold px-6 py-3.5 text-[14px] font-bold text-black transition-all hover:bg-gold-bright sm:w-auto sm:px-7 sm:py-4 sm:text-[15px]"
+                >
+                  Start a Project
+                  <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">
+                    arrow_forward
+                  </span>
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  to="/pricing"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-[2px] border border-white/18 px-6 py-3.5 text-[14px] font-semibold text-white/90 transition-colors hover:border-green-bright/70 hover:text-green-bright sm:w-auto sm:px-7 sm:py-4 sm:text-[15px]"
+                >
+                  View Pricing
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+                <a
+                  href="#services"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-[2px] border border-white/18 px-6 py-3.5 text-[14px] font-semibold text-white/90 transition-colors hover:border-green-bright/70 hover:text-green-bright sm:w-auto sm:px-7 sm:py-4 sm:text-[15px]"
+                >
+                  Explore Services
+                </a>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.2, ease: easeOut }}
+            className="relative mx-auto flex w-full max-w-[340px] items-center justify-center sm:max-w-[420px] lg:max-w-none"
+          >
+            <motion.div
+              className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle,rgba(31,157,85,0.22),transparent_68%)] blur-2xl"
+              animate={{ opacity: [0.5, 0.85, 0.5] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <div
+              className="relative aspect-square w-full max-w-[300px] overflow-hidden rounded-[2px] border border-white/10 p-6 sm:max-w-[380px] sm:p-8 md:p-10 lg:max-w-[420px]"
+              style={{
+                background:
+                  'linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01))',
+              }}
+            >
+              <motion.div
+                className="absolute top-4 left-4 h-6 w-6 border-t border-l border-gold/70 sm:top-5 sm:left-5 sm:h-8 sm:w-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              />
+              <motion.div
+                className="absolute right-4 bottom-4 h-6 w-6 border-r border-b border-green-bright/50 sm:right-5 sm:bottom-5 sm:h-8 sm:w-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              />
+              <div className="flex h-full flex-col items-center justify-center text-center">
+                <motion.img
+                  src="/axevro-mark.png?v=4"
+                  alt="Axevro"
+                  className="h-24 w-auto object-contain drop-shadow-[0_20px_50px_rgba(201,162,39,0.25)] sm:h-32 md:h-40"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                />
+                <div className="font-display mt-5 text-xl font-bold tracking-[0.18em] text-white sm:mt-6 sm:text-2xl md:text-3xl">
+                  AXEVRO
+                </div>
+                <div className="mt-2.5 flex items-center gap-2.5 sm:mt-3 sm:gap-3">
+                  <span className="h-px w-6 bg-green/60 sm:w-8" />
+                  <span className="font-mono text-[9px] tracking-[0.18em] text-green-bright uppercase sm:text-[10px] sm:tracking-[0.2em]">
+                    Product Studio
+                  </span>
+                  <span className="h-px w-6 bg-gold/50 sm:w-8" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
+
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate="show"
+          className="mt-12 border-t border-white/10 pt-5 sm:mt-14 sm:pt-6 md:mt-20"
+        >
+          <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-4 sm:gap-x-0 sm:gap-y-6">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                variants={fadeUp}
+                className={`px-0 sm:px-4 md:px-6 ${
+                  index > 0 ? 'sm:border-l sm:border-white/10' : ''
+                }`}
+              >
+                <div className="font-mono text-[1.4rem] font-medium tracking-tight sm:text-[1.55rem] md:text-[1.75rem]">
+                  <span className="text-gold-bright">{stat.num}</span>
+                  <span className="text-white/85">{stat.suffix}</span>
+                </div>
+                <div className="mt-1 text-[11px] tracking-[0.02em] text-[#8B919A] sm:mt-1.5 sm:text-[12px] md:text-[12.5px]">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )

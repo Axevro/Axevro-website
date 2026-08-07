@@ -199,6 +199,31 @@ export const services = [
     ],
     stack: ['Technical SEO', 'Meta Tags', 'Schema', 'Sitemaps', 'Core Web Vitals', 'Analytics'],
   },
+  {
+    num: '09',
+    slug: 'docker',
+    icon: 'deployed_code',
+    title: 'Docker',
+    desc: 'Containerized apps, reproducible environments, and production-ready Docker workflows.',
+    hero: 'Ship the same way everywhere with Docker-first delivery.',
+    overview:
+      'We containerize applications so development, staging, and production stay consistent — faster onboarding, cleaner releases, and fewer environment surprises.',
+    highlights: [
+      'Dockerfile and multi-stage image design',
+      'Docker Compose for local and staging stacks',
+      'Secure, optimized production images',
+      'Registry workflows and versioning',
+      'CI/CD integration with container builds',
+    ],
+    process: [
+      'Assess app architecture and runtime needs',
+      'Create efficient, secure Docker images',
+      'Define Compose or orchestration setup',
+      'Wire containers into CI/CD pipelines',
+      'Document runbooks and handoff support',
+    ],
+    stack: ['Docker', 'Compose', 'GitHub Actions', 'AWS', 'Linux Containers', 'Registries'],
+  },
 ]
 
 export function getServiceBySlug(slug) {

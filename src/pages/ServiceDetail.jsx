@@ -1,7 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Header from '../components/Header'
 import Footer from '../components/Footer'
+import PageHero from '../components/PageHero'
 import { getServiceBySlug, services } from '../data/services'
 
 export default function ServiceDetail() {
@@ -16,76 +16,55 @@ export default function ServiceDetail() {
 
   return (
     <>
-      <Header />
       <main>
-        <section className="relative overflow-hidden bg-black pt-16 pb-20 text-white">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-50"
-            style={{
-              background:
-                'radial-gradient(700px 280px at 10% 0%, rgba(74,222,128,0.16), transparent 55%), radial-gradient(520px 240px at 90% 20%, rgba(201,162,39,0.14), transparent 50%)',
-            }}
-          />
-          <div className="relative z-[1] mx-auto max-w-[1180px] px-6 md:px-8">
-            <Link
-              to="/#services"
-              className="mb-8 inline-flex items-center gap-1.5 font-mono text-xs tracking-[1.2px] text-green-bright uppercase transition-colors hover:text-gold-bright"
-            >
-              <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-              Back to services
-            </Link>
-
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45 }}
-            >
-              <div className="mb-5 flex items-center gap-3">
-                <span className="font-mono text-xs text-gold-bright">{service.num}</span>
-                <span className="inline-flex h-10 w-10 items-center justify-center border border-green-bright/30 bg-green-bright/10 text-green-bright">
-                  <span className="material-symbols-outlined text-[22px]">
-                    {service.icon}
-                  </span>
+        <PageHero
+          eyebrow={`Service ${service.num}`}
+          title={service.title}
+          description={service.hero}
+          backTo="/#services"
+          backLabel="Back to services"
+          actions={
+            <>
+              <Link to="/contact" className="btn-primary">
+                Start a Project
+                <span className="material-symbols-outlined text-[18px]">
+                  arrow_forward
                 </span>
-              </div>
-              <h1 className="font-display max-w-3xl text-[clamp(34px,5vw,56px)] leading-[1.08] font-semibold tracking-[-1.2px]">
-                {service.title}
-              </h1>
-              <p className="mt-5 max-w-2xl text-lg leading-[1.65] text-[#A8ACB4]">
-                {service.hero}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-[2px] border border-gold bg-gold px-6 py-3.5 text-sm font-bold text-black transition-colors hover:bg-gold-bright"
-                >
-                  Start a Project
-                  <span className="material-symbols-outlined text-[18px]">
-                    arrow_forward
-                  </span>
-                </Link>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center rounded-[2px] border border-white/25 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:border-green-bright hover:text-green-bright"
-                >
-                  Talk to us
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+              </Link>
+              <Link to="/contact" className="btn-secondary-dark">
+                Talk to us
+              </Link>
+            </>
+          }
+        />
 
-        <section className="py-[88px]">
-          <div className="mx-auto grid max-w-[1180px] gap-14 px-6 md:grid-cols-[1.2fr_0.8fr] md:px-8">
-            <div>
+        <section className="py-14 sm:py-16 md:py-[88px]">
+          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[1.2fr_0.8fr] md:gap-14 md:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+            >
               <div className="mb-4 flex items-center gap-2.5 font-mono text-xs tracking-[1.5px] text-gold-deep uppercase">
-                <span className="block h-[1.5px] w-[22px] bg-[linear-gradient(90deg,var(--color-gold),var(--color-green))]" />
+                <span
+                  className="block h-[1.5px] w-[22px]"
+                  style={{
+                    background:
+                      'linear-gradient(90deg, var(--color-gold), var(--color-green))',
+                  }}
+                />
                 Overview
+              </div>
+              <div className="mb-5 inline-flex h-11 w-11 items-center justify-center border border-green/20 bg-green/8 text-green">
+                <span className="material-symbols-outlined text-[24px]">
+                  {service.icon}
+                </span>
               </div>
               <h2 className="font-display text-[clamp(26px,3vw,36px)] font-semibold tracking-[-0.6px]">
                 What you get
               </h2>
-              <p className="mt-4 max-w-2xl text-base leading-[1.75] text-gray">
+              <p className="mt-4 max-w-2xl text-[15px] leading-[1.75] text-gray sm:text-base">
                 {service.overview}
               </p>
 
@@ -93,7 +72,7 @@ export default function ServiceDetail() {
                 {service.highlights.map((item) => (
                   <li
                     key={item}
-                    className="flex items-start gap-3 text-[15px] text-ink-soft"
+                    className="flex items-start gap-3 border border-transparent bg-bg-alt/60 px-3 py-3 text-[15px] text-ink-soft transition-colors hover:border-green/15"
                   >
                     <span className="material-symbols-outlined mt-0.5 text-[20px] text-green">
                       check_circle
@@ -102,13 +81,19 @@ export default function ServiceDetail() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
-            <aside className="border border-line bg-bg-alt p-7">
+            <motion.aside
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.08 }}
+              className="panel-soft h-fit p-6 sm:p-7 md:sticky md:top-[88px]"
+            >
               <h3 className="font-display text-lg font-semibold">How we deliver</h3>
               <ol className="mt-5 space-y-4">
                 {service.process.map((step, index) => (
-                  <li key={step} className="flex gap-3">
+                  <li key={step} className="flex gap-3 border-b border-line pb-4 last:border-0 last:pb-0">
                     <span className="font-mono text-xs text-green">
                       {String(index + 1).padStart(2, '0')}
                     </span>
@@ -132,13 +117,13 @@ export default function ServiceDetail() {
                   ))}
                 </div>
               </div>
-            </aside>
+            </motion.aside>
           </div>
         </section>
 
-        <section className="border-t border-line bg-bg-alt py-[88px]">
-          <div className="mx-auto max-w-[1180px] px-6 md:px-8">
-            <div className="mb-10 flex items-end justify-between gap-4">
+        <section className="border-t border-line bg-bg-alt py-14 sm:py-16 md:py-[88px]">
+          <div className="mx-auto max-w-[1180px] px-4 sm:px-6 md:px-8">
+            <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
               <div>
                 <div className="mb-3 flex items-center gap-2.5 font-mono text-xs tracking-[1.5px] text-gold-deep uppercase">
                   <span className="block h-[1.5px] w-[22px] bg-green" />
@@ -157,39 +142,52 @@ export default function ServiceDetail() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              {related.map((item) => (
-                <Link
+              {related.map((item, index) => (
+                <motion.div
                   key={item.slug}
-                  to={`/services/${item.slug}`}
-                  className="group border border-line bg-white p-6 transition-colors hover:border-green/35 hover:bg-white"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.06 }}
+                  whileHover={{ y: -4 }}
                 >
-                  <span className="material-symbols-outlined text-[22px] text-green">
-                    {item.icon}
-                  </span>
-                  <h3 className="font-display mt-3 text-lg font-semibold group-hover:text-green-deep">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-gray">{item.desc}</p>
-                </Link>
+                  <Link
+                    to={`/services/${item.slug}`}
+                    className="group panel block h-full p-5 transition-all hover:border-green/35 hover:shadow-[0_14px_36px_rgba(10,11,13,0.06)] sm:p-6"
+                  >
+                    <span className="inline-flex h-9 w-9 items-center justify-center border border-green/15 bg-green/5 text-green">
+                      <span className="material-symbols-outlined text-[20px]">
+                        {item.icon}
+                      </span>
+                    </span>
+                    <h3 className="font-display mt-3 text-lg font-semibold group-hover:text-green-deep">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray">{item.desc}</p>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-black py-20 text-center text-white">
-          <div className="mx-auto max-w-[720px] px-6">
-            <h2 className="font-display text-[clamp(28px,4vw,40px)] font-semibold">
+        <section className="relative overflow-hidden bg-black py-14 text-center text-white sm:py-20">
+          <div className="pointer-events-none absolute inset-0 surface-glow opacity-80" />
+          <div className="relative mx-auto max-w-[720px] px-4 sm:px-6">
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="font-display text-[clamp(24px,5.5vw,40px)] font-semibold"
+            >
               Ready to start your{' '}
               <span className="text-accent-gradient-bright">{service.title}</span>{' '}
               project?
-            </h2>
-            <p className="mt-4 text-[#9BA0A8]">
+            </motion.h2>
+            <p className="mt-4 text-[14.5px] text-[#9BA0A8] sm:text-base">
               Tell us what you are building — most quotes go out within 48 hours.
             </p>
-            <Link
-              to="/contact"
-              className="mt-8 inline-flex rounded-[2px] bg-gold px-8 py-4 text-sm font-bold text-black transition-colors hover:bg-gold-bright"
-            >
+            <Link to="/contact" className="btn-primary mt-7 w-full sm:mt-8 sm:w-auto">
               Request a Quote
             </Link>
           </div>

@@ -4,7 +4,7 @@ import { getWhatsAppUrl } from '../data/contact'
 
 const quickLinks = [
   { label: 'About Us', to: '/#about' },
-  { label: 'Portfolio', to: '/#portfolio' },
+  { label: 'Pricing', to: '/pricing' },
   { label: 'DevOps', to: '/#devops' },
   { label: 'Process', to: '/#process' },
 ]
@@ -18,15 +18,15 @@ const serviceLinks = [
 
 const companyLinks = [
   { label: 'Stack', to: '/#stack' },
-  { label: 'Testimonials', to: '/#testimonials' },
+  { label: 'Pricing', to: '/pricing' },
   { label: 'Contact', to: '/contact' },
   { label: 'Get a Quote', to: '/contact' },
 ]
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line-dark bg-black pt-[70px] text-white">
-      <div className="mx-auto grid max-w-[1180px] grid-cols-1 gap-10 px-6 pb-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(4,1fr)] md:px-8">
+    <footer className="border-t border-line-dark bg-black pt-14 text-white sm:pt-[70px]">
+      <div className="mx-auto grid max-w-[1180px] grid-cols-1 gap-8 px-4 pb-12 sm:grid-cols-2 sm:gap-10 sm:px-6 sm:pb-14 lg:grid-cols-[1.6fr_repeat(4,1fr)] md:px-8">
         <div>
           <Link to="/" aria-label="Axevro home">
             <Logo size="md" inverted />
@@ -126,7 +126,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 border-t border-line-dark px-6 py-6 text-[13px] text-[#63676F] md:px-8">
+      <div className="mx-auto flex max-w-[1180px] flex-col gap-3 border-t border-line-dark px-4 py-5 text-[12.5px] text-[#63676F] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-6 sm:py-6 sm:text-[13px] md:px-8">
         <div>© 2026 Axevro. All rights reserved.</div>
         <div className="flex flex-wrap gap-x-2 gap-y-1">
           <Link to="/privacy-policy" className="hover:text-white">

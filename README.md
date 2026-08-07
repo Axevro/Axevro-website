@@ -58,6 +58,12 @@ Docker · GitHub Actions · AWS · Authentication · SEO
 | `/services/maintenance-support` | Maintenance & Support |
 | `/services/authentication` | Authentication |
 | `/services/seo` | SEO |
+| `/services/docker` | Docker |
+| `/process/discovery-requirement-analysis` | Process Step 01 |
+| `/process/planning-ui-ux-design` | Process Step 02 |
+| `/process/development` | Process Step 03 |
+| `/process/cicd-cloud-deployment` | Process Step 04 |
+| `/process/maintenance` | Process Step 05 |
 | `/contact` | Contact form |
 | `/privacy-policy` | Privacy Policy |
 | `/terms-and-conditions` | Terms & Conditions |

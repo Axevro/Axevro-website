@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Footer from './Footer'
+import PageHero from './PageHero'
 import LinkedText from './LinkedText'
 
 const relatedLinks = [
@@ -15,55 +15,25 @@ export default function LegalPage({ page }) {
 
   return (
     <>
-      <Header />
       <main>
-        <section className="relative overflow-hidden bg-black pt-14 pb-14 text-white sm:pt-16 sm:pb-16">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-50"
-            style={{
-              background:
-                'radial-gradient(700px 280px at 10% 0%, rgba(74,222,128,0.16), transparent 55%), radial-gradient(520px 240px at 90% 20%, rgba(201,162,39,0.14), transparent 50%)',
-            }}
-          />
-          <div className="relative z-[1] mx-auto max-w-[1180px] px-5 sm:px-6 md:px-8">
-            <Link
-              to="/"
-              className="mb-6 inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[1.2px] text-green-bright uppercase transition-colors hover:text-gold-bright sm:mb-8 sm:text-xs"
-            >
-              <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-              Back to home
-            </Link>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <div className="mb-3 flex items-center gap-2.5 font-mono text-[11px] tracking-[1.5px] text-gold-bright uppercase sm:mb-4 sm:text-xs">
-                <span className="block h-[1.5px] w-[22px] bg-gold-bright" />
-                Legal
-              </div>
-              <h1 className="font-display max-w-3xl text-[clamp(30px,6vw,52px)] leading-[1.1] font-semibold tracking-[-1px]">
-                {title}
-              </h1>
-              <p className="mt-3 font-mono text-[12px] tracking-[0.4px] text-[#9BA0A8] sm:mt-4">
-                Last updated: {updated}
-              </p>
-              <p className="mt-4 max-w-2xl text-[15px] leading-[1.7] text-[#A8ACB4] sm:mt-5 sm:text-base sm:leading-[1.65]">
-                {intro}
-              </p>
-            </motion.div>
-          </div>
-        </section>
+        <PageHero
+          eyebrow="Legal"
+          title={title}
+          description={intro}
+        />
 
         <section className="py-12 sm:py-16 md:py-[88px]">
-          <div className="mx-auto grid max-w-[1180px] gap-10 px-5 sm:px-6 md:grid-cols-[minmax(0,1fr)_260px] md:gap-12 md:px-8 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="mx-auto grid max-w-[1180px] gap-8 px-4 sm:gap-10 sm:px-6 md:grid-cols-[minmax(0,1fr)_260px] md:gap-12 md:px-8 lg:grid-cols-[minmax(0,1fr)_280px]">
             <motion.article
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.05 }}
-              className="min-w-0"
+              className="panel min-w-0 p-4 sm:p-7 md:p-8"
             >
+              <p className="mb-8 font-mono text-[12px] tracking-[0.4px] text-gray">
+                Last updated: {updated}
+              </p>
+
               <div className="space-y-8 sm:space-y-10">
                 {sections.map((section) => (
                   <section key={section.heading} className="scroll-mt-28">
@@ -118,12 +88,12 @@ export default function LegalPage({ page }) {
               </div>
             </motion.article>
 
-            <aside className="md:sticky md:top-28 md:self-start">
-              <div className="border border-line bg-bg-alt p-5 sm:p-6">
+            <aside className="md:sticky md:top-[88px] md:self-start">
+              <div className="panel-soft p-5 sm:p-6">
                 <h3 className="font-mono text-[11px] tracking-[1px] text-gold-deep uppercase">
                   Legal pages
                 </h3>
-                <nav className="mt-4 flex flex-col gap-2.5">
+                <nav className="mt-4 flex flex-col gap-2">
                   {relatedLinks.map((link) => {
                     const active = link.to.includes(slug)
                     return (

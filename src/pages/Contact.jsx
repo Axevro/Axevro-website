@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import Header from '../components/Header'
 import Footer from '../components/Footer'
+import PageHero from '../components/PageHero'
 import { getWhatsAppUrl } from '../data/contact'
 
 const initialForm = {
@@ -51,8 +51,6 @@ export default function Contact() {
     }
 
     setSubmitting(true)
-
-    // Front-end submit for now — hook to API/email service later
     window.setTimeout(() => {
       toast.success('Message sent. We will get back within 48 hours.')
       setForm(initialForm)
@@ -61,53 +59,76 @@ export default function Contact() {
   }
 
   const fieldClass = (field) =>
-    `w-full rounded-[2px] border bg-white px-4 py-3.5 text-[15px] text-ink outline-none transition-colors placeholder:text-gray-light focus:border-green ${
+    `w-full rounded-[2px] border bg-white px-4 py-3.5 text-[15px] text-ink outline-none transition-all placeholder:text-gray-light focus:border-green focus:shadow-[0_0_0_3px_rgba(31,157,85,0.12)] ${
       errors[field] ? 'border-red-400' : 'border-line'
     }`
 
   return (
     <>
-      <Header />
       <main>
-        <section className="relative overflow-hidden bg-black pt-16 pb-16 text-white">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-50"
-            style={{
-              background:
-                'radial-gradient(700px 280px at 10% 0%, rgba(74,222,128,0.16), transparent 55%), radial-gradient(520px 240px at 90% 20%, rgba(201,162,39,0.14), transparent 50%)',
-            }}
-          />
-          <div className="relative z-[1] mx-auto max-w-[1180px] px-6 md:px-8">
-            <Link
-              to="/"
-              className="mb-8 inline-flex items-center gap-1.5 font-mono text-xs tracking-[1.2px] text-green-bright uppercase transition-colors hover:text-gold-bright"
-            >
-              <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-              Back to home
-            </Link>
+        <PageHero
+          eyebrow="Contact"
+          title="Tell us what you're"
+          titleAccent="building"
+          description="Share a few details and we'll respond within 48 hours — with clear next steps, not a generic reply."
+          actions={
+            <>
+              <a href="#contact-form" className="btn-primary">
+                Send a message
+                <span className="material-symbols-outlined text-[18px]">
+                  arrow_forward
+                </span>
+              </a>
+              <Link to="/pricing" className="btn-secondary-dark">
+                View pricing
+              </Link>
+            </>
+          }
+        />
 
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45 }}
-            >
-              <div className="mb-4 flex items-center gap-2.5 font-mono text-xs tracking-[1.5px] text-gold-bright uppercase">
-                <span className="block h-[1.5px] w-[22px] bg-gold-bright" />
-                Contact
-              </div>
-              <h1 className="font-display max-w-3xl text-[clamp(34px,5vw,56px)] leading-[1.08] font-semibold tracking-[-1.2px]">
-                Let&apos;s build something{' '}
-                <span className="text-accent-gradient-bright">excellent</span>
-              </h1>
-              <p className="mt-5 max-w-xl text-lg leading-[1.65] text-[#A8ACB4]">
-                Share your details and we&apos;ll respond within 48 hours.
-              </p>
-            </motion.div>
+        <section className="border-b border-line bg-bg-alt py-8 sm:py-10">
+          <div className="mx-auto grid max-w-[1180px] gap-5 px-4 sm:grid-cols-3 sm:gap-6 sm:px-6 md:px-8">
+            {[
+              {
+                icon: 'schedule',
+                title: '48-hour reply',
+                desc: 'Most inquiries get a clear response within two business days.',
+              },
+              {
+                icon: 'payments',
+                title: 'Intro pricing',
+                desc: 'Portfolio-friendly rates with development and deployment broken out.',
+              },
+              {
+                icon: 'verified_user',
+                title: 'Scoped proposals',
+                desc: 'We confirm deliverables in writing before any build begins.',
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="flex gap-3"
+              >
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-green/20 bg-white text-green">
+                  <span className="material-symbols-outlined text-[20px]">
+                    {item.icon}
+                  </span>
+                </span>
+                <div>
+                  <div className="font-display text-[15px] font-semibold">{item.title}</div>
+                  <p className="mt-1 text-[13px] leading-snug text-gray">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </section>
 
-        <section className="py-[88px]">
-          <div className="mx-auto grid max-w-[1180px] gap-12 px-6 md:grid-cols-[0.9fr_1.1fr] md:px-8">
+        <section id="contact-form" className="scroll-mt-24 py-14 sm:py-16 md:py-[88px]">
+          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[0.9fr_1.1fr] md:px-8">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -115,73 +136,70 @@ export default function Contact() {
               transition={{ duration: 0.4 }}
             >
               <h2 className="font-display text-[clamp(24px,3vw,32px)] font-semibold tracking-[-0.5px]">
-                Get in touch
+                Prefer a direct line?
               </h2>
-              <p className="mt-3 text-base leading-[1.7] text-gray">
-                Tell us about your project, timeline, or question — name, phone,
-                email, and subject are all we need to start.
+              <p className="mt-3 text-[15px] leading-[1.7] text-gray sm:text-base">
+                Reach us by email, phone, or WhatsApp — or use the form and we&apos;ll
+                come back with next steps.
               </p>
 
-              <div className="mt-8 space-y-5">
-                <a
-                  href="mailto:axevro9@gmail.com"
-                  className="flex items-center gap-3 text-[15px] font-medium text-green transition-colors hover:text-green-deep hover:underline"
-                >
-                  <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
-                    <span className="material-symbols-outlined text-[20px]">mail</span>
-                  </span>
-                  axevro9@gmail.com
-                </a>
-                <a
-                  href="tel:+917084788119"
-                  className="flex items-center gap-3 text-[15px] font-medium text-green transition-colors hover:text-green-deep hover:underline"
-                >
-                  <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
-                    <span className="material-symbols-outlined text-[20px]">call</span>
-                  </span>
-                  <span className="flex flex-col leading-tight">
-                    <span>7084788119</span>
-                    <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gold-deep uppercase">
-                      Primary
+              <div className="mt-8 space-y-3">
+                {[
+                  {
+                    href: 'mailto:axevro9@gmail.com',
+                    icon: 'mail',
+                    label: 'axevro9@gmail.com',
+                    note: 'Email',
+                    color: 'text-green',
+                  },
+                  {
+                    href: 'tel:+917084788119',
+                    icon: 'call',
+                    label: '7084788119',
+                    note: 'Primary',
+                    color: 'text-green',
+                  },
+                  {
+                    href: 'tel:+919693174749',
+                    icon: 'call',
+                    label: '9693174749',
+                    note: 'Alternate',
+                    color: 'text-green',
+                  },
+                  {
+                    href: getWhatsAppUrl(),
+                    icon: 'chat',
+                    label: 'WhatsApp us',
+                    note: '9693174749',
+                    color: 'text-[#128C7E]',
+                    external: true,
+                  },
+                ].map((item, index) => (
+                  <motion.a
+                    key={item.label + item.note}
+                    href={item.href}
+                    target={item.external ? '_blank' : undefined}
+                    rel={item.external ? 'noopener noreferrer' : undefined}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.05 }}
+                    whileHover={{ y: -3 }}
+                    className={`flex items-center gap-3 border border-line bg-white px-3.5 py-3.5 transition-all hover:border-green/30 hover:shadow-[0_10px_28px_rgba(10,11,13,0.06)] sm:px-4 ${item.color}`}
+                  >
+                    <span className="inline-flex h-10 w-10 items-center justify-center border border-green/20 bg-green/8 text-green">
+                      <span className="material-symbols-outlined text-[20px]">
+                        {item.icon}
+                      </span>
                     </span>
-                  </span>
-                </a>
-                <a
-                  href="tel:+919693174749"
-                  className="flex items-center gap-3 text-[15px] font-medium text-green transition-colors hover:text-green-deep hover:underline"
-                >
-                  <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
-                    <span className="material-symbols-outlined text-[20px]">call</span>
-                  </span>
-                  <span className="flex flex-col leading-tight">
-                    <span>9693174749</span>
-                    <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gray uppercase">
-                      Alternate
+                    <span className="flex flex-col leading-tight">
+                      <span className="text-[15px] font-medium">{item.label}</span>
+                      <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gray uppercase">
+                        {item.note}
+                      </span>
                     </span>
-                  </span>
-                </a>
-                <a
-                  href={getWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-[15px] font-medium text-[#128C7E] transition-colors hover:text-[#075E54] hover:underline"
-                >
-                  <span className="inline-flex h-10 w-10 items-center justify-center border border-[#25D366]/40 bg-[#25D366]/12 text-[#128C7E]">
-                    <span className="material-symbols-outlined text-[20px]">chat</span>
-                  </span>
-                  <span className="flex flex-col leading-tight">
-                    <span>WhatsApp us</span>
-                    <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gray uppercase">
-                      9693174749
-                    </span>
-                  </span>
-                </a>
-                <div className="flex items-center gap-3 text-[15px] text-ink-soft">
-                  <span className="inline-flex h-10 w-10 items-center justify-center border border-green/25 bg-green/8 text-green">
-                    <span className="material-symbols-outlined text-[20px]">schedule</span>
-                  </span>
-                  Response within 48 hours
-                </div>
+                  </motion.a>
+                ))}
               </div>
             </motion.div>
 
@@ -192,10 +210,17 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.08 }}
-              className="border border-line bg-bg-alt p-6 md:p-8"
+              className="border border-line bg-white p-4 shadow-[0_18px_50px_rgba(10,11,13,0.06)] sm:p-6 md:p-8"
             >
+              <div className="mb-6 border-b border-line pb-5">
+                <h3 className="font-display text-xl font-semibold">Send a message</h3>
+                <p className="mt-1 text-sm text-gray">
+                  Name, phone, email, and subject — that&apos;s all we need to start.
+                </p>
+              </div>
+
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <label className="block sm:col-span-1">
+                <label className="block">
                   <span className="mb-2 block font-mono text-[11px] tracking-[1px] text-gold-deep uppercase">
                     Name
                   </span>
@@ -213,7 +238,7 @@ export default function Contact() {
                   )}
                 </label>
 
-                <label className="block sm:col-span-1">
+                <label className="block">
                   <span className="mb-2 block font-mono text-[11px] tracking-[1px] text-gold-deep uppercase">
                     Phone
                   </span>
@@ -221,7 +246,7 @@ export default function Contact() {
                     type="tel"
                     name="phone"
                     autoComplete="tel"
-                    placeholder="+1 000 000 0000"
+                    placeholder="7084788119"
                     value={form.phone}
                     onChange={updateField('phone')}
                     className={fieldClass('phone')}
@@ -272,12 +297,31 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-black px-6 py-4 text-sm font-bold text-white transition-colors hover:bg-green disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+                className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-gold px-6 py-4 text-sm font-bold text-black transition-all hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
               >
                 {submitting ? 'Sending...' : 'Send Message'}
                 <span className="material-symbols-outlined text-[18px]">send</span>
               </button>
             </motion.form>
+          </div>
+        </section>
+
+        <section className="border-t border-line bg-black py-14 text-center text-white sm:py-16">
+          <div className="relative mx-auto max-w-[560px] px-4 sm:px-6">
+            <h2 className="font-display text-[clamp(22px,4vw,32px)] font-semibold">
+              Prefer WhatsApp?
+            </h2>
+            <p className="mt-3 text-[14.5px] text-[#9BA0A8]">
+              Message us directly — useful for quick questions before a formal quote.
+            </p>
+            <a
+              href={getWhatsAppUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary mt-6"
+            >
+              Chat on WhatsApp
+            </a>
           </div>
         </section>
       </main>
