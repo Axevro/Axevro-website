@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import SectionHeading from './SectionHeading'
-import { packagePricing, pricingIntro } from '../data/pricing'
-import { easeOut } from '../lib/motion'
+import SectionHeading from '../ui/SectionHeading'
+import { packagePricing, pricingIntro } from '../../data/pricing'
+import { easeOut } from '../../lib/motion'
 
 const preview = packagePricing.slice(0, 6)
 
@@ -116,7 +116,7 @@ export default function PricingPreview() {
             >
               View full pricing
             </Link>
-            <Link to="/contact" className="btn-primary justify-center">
+            <Link to="/contact#contact" className="btn-primary justify-center">
               Get a quote
               <span className="material-symbols-outlined text-[16px]">
                 arrow_forward

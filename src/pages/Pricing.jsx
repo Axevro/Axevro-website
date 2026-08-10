@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Footer from '../components/Footer'
-import PageHero from '../components/PageHero'
+import { Footer } from '../components/layout'
+import { PageHero } from '../components/ui'
 import {
   introRanges,
   packagePricing,
@@ -39,7 +39,7 @@ export default function Pricing() {
           description={pricingIntro.body}
           actions={
             <>
-              <Link to="/contact" className="btn-primary">
+              <Link to="/contact#contact" className="btn-primary">
                 Start a project
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_forward
@@ -221,7 +221,7 @@ export default function Pricing() {
                 Found a fit? We&apos;ll confirm scope and timelines in a clear
                 proposal — usually within 48 hours.
               </p>
-              <Link to="/contact" className="btn-primary shrink-0 justify-center">
+              <Link to="/contact#contact" className="btn-primary shrink-0 justify-center">
                 Request a quote
               </Link>
             </div>
@@ -343,7 +343,7 @@ export default function Pricing() {
               commercials within 48 hours.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link to="/contact" className="btn-primary w-full sm:w-auto">
+              <Link to="/contact#contact" className="btn-primary w-full sm:w-auto">
                 Talk to Axevro
               </Link>
               <Link to="/#process" className="btn-secondary-dark w-full sm:w-auto">

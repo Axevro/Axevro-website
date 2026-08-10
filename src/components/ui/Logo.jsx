@@ -30,11 +30,16 @@ export default function Logo({
       }}
     >
       <img
-        src="/axevro-mark.png?v=4"
+        src="/brand/axevro-mark.png"
         alt={showWordmark ? '' : 'Axevro'}
         aria-hidden={showWordmark ? true : undefined}
         width={Math.round(s.height * 1.25)}
         height={s.height}
+        loading="eager"
+        decoding="async"
+        onError={(event) => {
+          event.currentTarget.style.visibility = 'hidden'
+        }}
         style={{
           height: s.height,
           width: 'auto',
@@ -96,9 +101,14 @@ export default function Logo({
 export function LogoMark({ className = 'h-16 w-16' }) {
   return (
     <img
-      src="/axevro-mark.png?v=4"
+      src="/brand/axevro-mark.png"
       alt="Axevro"
       className={`object-contain ${className}`}
+      loading="lazy"
+      decoding="async"
+      onError={(event) => {
+        event.currentTarget.style.visibility = 'hidden'
+      }}
     />
   )
 }

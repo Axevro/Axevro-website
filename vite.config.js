@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+﻿import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -6,8 +6,16 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    watch: {
-      ignored: ['**/axevro-homepage*.html'],
-    },
+    // Reachable on Wi-Fi / LAN (not only localhost)
+    host: true,
+    port: 5173,
+    strictPort: false,
+    cors: true,
+  },
+  preview: {
+    host: true,
+    port: 4173,
+    strictPort: false,
+    cors: true,
   },
 })

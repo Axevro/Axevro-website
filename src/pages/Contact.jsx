@@ -2,9 +2,13 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
-import Footer from '../components/Footer'
-import PageHero from '../components/PageHero'
-import { getWhatsAppUrl } from '../data/contact'
+import { Footer } from '../components/layout'
+import { PageHero } from '../components/ui'
+import {
+  getMailtoInquiryUrl,
+  getWhatsAppInquiryUrl,
+  getWhatsAppUrl,
+} from '../data/contact'
 
 const initialForm = {
   name: '',
@@ -51,11 +55,33 @@ export default function Contact() {
     }
 
     setSubmitting(true)
-    window.setTimeout(() => {
-      toast.success('Message sent. We will get back within 48 hours.')
+
+    try {
+      const payload = {
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        email: form.email.trim(),
+        subject: form.subject.trim(),
+      }
+
+      // Works on any network — opens WhatsApp with a prefilled inquiry.
+      // Email is a secondary path if WhatsApp is blocked.
+      const whatsappUrl = getWhatsAppInquiryUrl(payload)
+      const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+
+      if (!opened) {
+        window.location.href = getMailtoInquiryUrl(payload)
+        toast.message('Opening your email app to send the inquiry…')
+      } else {
+        toast.success('Opening WhatsApp with your inquiry. Send the message to reach us.')
+      }
+
       setForm(initialForm)
+    } catch {
+      toast.error('Something went wrong. Please try WhatsApp or email us directly.')
+    } finally {
       setSubmitting(false)
-    }, 500)
+    }
   }
 
   const fieldClass = (field) =>
@@ -73,7 +99,7 @@ export default function Contact() {
           description="Share a few details and we'll respond within 48 hours — with clear next steps, not a generic reply."
           actions={
             <>
-              <a href="#contact-form" className="btn-primary">
+              <a href="#contact" className="btn-primary">
                 Send a message
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_forward
@@ -127,8 +153,11 @@ export default function Contact() {
           </div>
         </section>
 
-        <section id="contact-form" className="scroll-mt-24 py-14 sm:py-16 md:py-[88px]">
-          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[0.9fr_1.1fr] md:px-8">
+        <section
+          id="contact"
+          className="scroll-mt-24 border-t border-line bg-bg-alt/40 py-14 sm:scroll-mt-[88px] sm:py-16 md:py-[88px]"
+        >
+          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[0.9fr_1.1fr] md:gap-14 md:px-8">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -299,9 +328,19 @@ export default function Contact() {
                 disabled={submitting}
                 className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-gold px-6 py-4 text-sm font-bold text-black transition-all hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
               >
-                {submitting ? 'Sending...' : 'Send Message'}
+                {submitting ? 'Opening…' : 'Send via WhatsApp'}
                 <span className="material-symbols-outlined text-[18px]">send</span>
               </button>
+              <p className="mt-3 text-[12.5px] leading-relaxed text-gray">
+                Submits through WhatsApp so it works reliably on any Wi‑Fi or mobile
+                network. Prefer email?{' '}
+                <a
+                  href={`mailto:axevro9@gmail.com`}
+                  className="font-semibold text-green-deep underline-offset-2 hover:underline"
+                >
+                  axevro9@gmail.com
+                </a>
+              </p>
             </motion.form>
           </div>
         </section>

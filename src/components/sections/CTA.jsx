@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { getWhatsAppUrl } from '../data/contact'
-import { easeOut } from '../lib/motion'
+import { getWhatsAppUrl } from '../../data/contact'
+import { easeOut } from '../../lib/motion'
 
 export default function CTA() {
   return (
@@ -79,7 +79,7 @@ export default function CTA() {
           className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
         >
           <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
-            <Link to="/contact" className="btn-primary w-full sm:w-auto">
+            <Link to="/contact#contact" className="btn-primary w-full sm:w-auto">
               Request a Quote
             </Link>
           </motion.div>

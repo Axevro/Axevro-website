@@ -1,7 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Footer from '../components/Footer'
-import PageHero from '../components/PageHero'
+import { Footer } from '../components/layout'
+import { PageHero } from '../components/ui'
 import { getServiceBySlug, services } from '../data/services'
 
 export default function ServiceDetail() {
@@ -25,13 +25,13 @@ export default function ServiceDetail() {
           backLabel="Back to services"
           actions={
             <>
-              <Link to="/contact" className="btn-primary">
+              <Link to="/contact#contact" className="btn-primary">
                 Start a Project
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_forward
                 </span>
               </Link>
-              <Link to="/contact" className="btn-secondary-dark">
+              <Link to="/contact#contact" className="btn-secondary-dark">
                 Talk to us
               </Link>
             </>
@@ -69,16 +69,21 @@ export default function ServiceDetail() {
               </p>
 
               <ul className="mt-8 space-y-3.5">
-                {service.highlights.map((item) => (
-                  <li
+                {service.highlights.map((item, index) => (
+                  <motion.li
                     key={item}
+                    initial={{ opacity: 0, x: -12 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.05 }}
+                    whileHover={{ x: 4 }}
                     className="flex items-start gap-3 border border-transparent bg-bg-alt/60 px-3 py-3 text-[15px] text-ink-soft transition-colors hover:border-green/15"
                   >
                     <span className="material-symbols-outlined mt-0.5 text-[20px] text-green">
                       check_circle
                     </span>
                     {item}
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </motion.div>
@@ -187,7 +192,7 @@ export default function ServiceDetail() {
             <p className="mt-4 text-[14.5px] text-[#9BA0A8] sm:text-base">
               Tell us what you are building — most quotes go out within 48 hours.
             </p>
-            <Link to="/contact" className="btn-primary mt-7 w-full sm:mt-8 sm:w-auto">
+            <Link to="/contact#contact" className="btn-primary mt-7 w-full sm:mt-8 sm:w-auto">
               Request a Quote
             </Link>
           </div>

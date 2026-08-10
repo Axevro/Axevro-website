@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { easeOut, staggerContainer, fadeUp } from '../lib/motion'
+import { easeOut, staggerContainer, fadeUp } from '../../lib/motion'
+import SafeImage from '../ui/SafeImage'
+import { siteImages } from '../../data/images'
 
 const stats = [
   { num: '120', suffix: '+', label: 'Projects delivered' },
@@ -148,7 +150,7 @@ export default function Hero() {
             >
               <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
                 <Link
-                  to="/contact"
+                  to="/contact#contact"
                   className="group inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-gold px-6 py-3.5 text-[14px] font-bold text-black transition-all hover:bg-gold-bright sm:w-auto sm:px-7 sm:py-4 sm:text-[15px]"
                 >
                   Start a Project
@@ -187,13 +189,22 @@ export default function Hero() {
               animate={{ opacity: [0.5, 0.85, 0.5] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
             />
-            <div
-              className="relative aspect-square w-full max-w-[300px] overflow-hidden rounded-[2px] border border-white/10 p-6 sm:max-w-[380px] sm:p-8 md:p-10 lg:max-w-[420px]"
-              style={{
-                background:
-                  'linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01))',
-              }}
-            >
+            <div className="relative aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-[2px] border border-white/10 sm:max-w-[380px] lg:max-w-[420px]">
+              <SafeImage
+                src={siteImages.studio}
+                alt="Axevro product studio workspace"
+                className="absolute inset-0 h-full w-full object-cover"
+                fallbackClassName="object-contain p-16 opacity-60"
+                loading="eager"
+                sizes="(max-width: 1024px) 90vw, 420px"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(180deg, rgba(10,11,13,0.25) 0%, rgba(10,11,13,0.82) 100%), radial-gradient(circle at 50% 30%, rgba(201,162,39,0.15), transparent 55%)',
+                }}
+              />
               <motion.div
                 className="absolute top-4 left-4 h-6 w-6 border-t border-l border-gold/70 sm:top-5 sm:left-5 sm:h-8 sm:w-8"
                 initial={{ opacity: 0 }}
@@ -206,19 +217,23 @@ export default function Hero() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7 }}
               />
-              <div className="flex h-full flex-col items-center justify-center text-center">
-                <motion.img
-                  src="/axevro-mark.png?v=4"
-                  alt="Axevro"
-                  className="h-24 w-auto object-contain drop-shadow-[0_20px_50px_rgba(201,162,39,0.25)] sm:h-32 md:h-40"
-                  animate={{ y: [0, -8, 0] }}
+              <div className="absolute inset-0 flex flex-col items-center justify-end px-6 pb-8 text-center sm:pb-10">
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
                   transition={{
                     duration: 5,
                     repeat: Infinity,
                     ease: 'easeInOut',
                   }}
-                />
-                <div className="font-display mt-5 text-xl font-bold tracking-[0.18em] text-white sm:mt-6 sm:text-2xl md:text-3xl">
+                >
+                  <SafeImage
+                    src={siteImages.mark}
+                    alt="Axevro"
+                    className="mx-auto h-16 w-auto object-contain drop-shadow-[0_20px_50px_rgba(201,162,39,0.35)] sm:h-20 md:h-24"
+                    loading="eager"
+                  />
+                </motion.div>
+                <div className="font-display mt-4 text-xl font-bold tracking-[0.18em] text-white sm:text-2xl md:text-3xl">
                   AXEVRO
                 </div>
                 <div className="mt-2.5 flex items-center gap-2.5 sm:mt-3 sm:gap-3">

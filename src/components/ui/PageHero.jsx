@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { easeOut } from '../lib/motion'
+import { easeOut } from '../../lib/motion'
+import SafeImage from './SafeImage'
+import { siteImages } from '../../data/images'
 
 export default function PageHero({
   eyebrow = 'Axevro',
@@ -127,10 +129,11 @@ export default function PageHero({
             >
               <div className="absolute top-4 left-4 h-5 w-5 border-t border-l border-gold/70" />
               <div className="absolute right-4 bottom-4 h-5 w-5 border-r border-b border-green-bright/50" />
-              <img
-                src="/axevro-mark.png?v=4"
+              <SafeImage
+                src={siteImages.mark}
                 alt=""
                 className="h-20 w-auto object-contain drop-shadow-[0_16px_40px_rgba(201,162,39,0.28)]"
+                loading="eager"
               />
               <div className="font-display mt-4 text-sm font-bold tracking-[0.22em] text-white">
                 AXEVRO

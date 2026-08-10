@@ -1,8 +1,12 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { scrollToHash, smoothScrollTo } from '../lib/smoothScroll'
+import { scrollToHash, smoothScrollTo } from '../../lib/smoothScroll'
 
-function getHashIdFromHref(href, pathname) {
+/**
+ * Resolve an in-page hash target from an href, when the target
+ * already exists on the current route (avoids full remount).
+ */
+function getSamePageHashId(href, pathname) {
   if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
     return null
   }
@@ -12,12 +16,40 @@ function getHashIdFromHref(href, pathname) {
     return id || null
   }
 
-  if (href.startsWith('/#') && (pathname === '/' || pathname === '')) {
-    const id = href.slice(2)
-    return id || null
+  const hashIndex = href.indexOf('#')
+  if (hashIndex === -1) return null
+
+  const path = href.slice(0, hashIndex) || '/'
+  const id = href.slice(hashIndex + 1)
+  if (!id) return null
+
+  // /#about on home, or /contact#contact while already on /contact
+  if (path === '/#' || path === '/') {
+    if (pathname === '/' || pathname === '') return id
+    return null
   }
 
+  if (path === pathname) return id
   return null
+}
+
+function scrollToHashWithRetry(hash, { attempts = 30, interval = 40 } = {}) {
+  let cancelled = false
+  let tries = 0
+
+  const tick = () => {
+    if (cancelled) return
+    if (scrollToHash(hash)) return
+    tries += 1
+    if (tries < attempts) {
+      window.setTimeout(tick, interval)
+    }
+  }
+
+  tick()
+  return () => {
+    cancelled = true
+  }
 }
 
 export default function ScrollToTop() {
@@ -25,13 +57,7 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     if (hash) {
-      // Wait a tick so the target section is in the DOM after route paint
-      const timer = window.setTimeout(() => {
-        if (!scrollToHash(hash)) {
-          smoothScrollTo(0, { offset: 0, duration: 280 })
-        }
-      }, 40)
-      return () => window.clearTimeout(timer)
+      return scrollToHashWithRetry(hash)
     }
 
     smoothScrollTo(0, { offset: 0, duration: 280 })
@@ -47,7 +73,7 @@ export default function ScrollToTop() {
       if (!anchor) return
 
       const href = anchor.getAttribute('href')
-      const id = getHashIdFromHref(href, pathname)
+      const id = getSamePageHashId(href, pathname)
       if (!id) return
 
       const el = document.getElementById(id)
@@ -55,7 +81,7 @@ export default function ScrollToTop() {
 
       event.preventDefault()
       if (window.location.hash !== `#${id}`) {
-        window.history.pushState(null, '', `#${id}`)
+        window.history.pushState(null, '', `${pathname === '/' ? '' : pathname}#${id}`)
       }
       smoothScrollTo(el)
     }

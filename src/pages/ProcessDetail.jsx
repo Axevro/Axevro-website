@@ -1,7 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Footer from '../components/Footer'
-import PageHero from '../components/PageHero'
+import { Footer } from '../components/layout'
+import { PageHero } from '../components/ui'
 import { getProcessBySlug, processSteps } from '../data/process'
 
 export default function ProcessDetail() {
@@ -30,7 +30,7 @@ export default function ProcessDetail() {
           backLabel="Back to process"
           actions={
             <>
-              <Link to="/contact" className="btn-primary">
+              <Link to="/contact#contact" className="btn-primary">
                 Start this phase
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_forward
@@ -41,7 +41,7 @@ export default function ProcessDetail() {
                   Next: {next.name}
                 </Link>
               ) : (
-                <Link to="/contact" className="btn-secondary-dark">
+                <Link to="/contact#contact" className="btn-secondary-dark">
                   Talk to us
                 </Link>
               )}
@@ -85,16 +85,21 @@ export default function ProcessDetail() {
                 Key focus areas
               </h3>
               <ul className="mt-5 space-y-3">
-                {step.highlights.map((item) => (
-                  <li
+                {step.highlights.map((item, index) => (
+                  <motion.li
                     key={item}
+                    initial={{ opacity: 0, x: -12 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.05 }}
+                    whileHover={{ x: 4 }}
                     className="flex items-start gap-3 border border-transparent bg-bg-alt/70 px-3 py-3 text-[15px] text-ink-soft transition-colors hover:border-green/15"
                   >
                     <span className="material-symbols-outlined mt-0.5 text-[20px] text-green">
                       check_circle
                     </span>
                     {item}
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </motion.div>
@@ -237,7 +242,7 @@ export default function ProcessDetail() {
                       View pricing
                     </Link>
                     <Link
-                      to="/contact"
+                      to="/contact#contact"
                       className="inline-flex items-center justify-center gap-2 bg-black px-5 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-green"
                     >
                       Request a proposal
@@ -324,7 +329,7 @@ export default function ProcessDetail() {
                   </span>
                 </Link>
               ) : (
-                <Link to="/contact" className="btn-primary">
+                <Link to="/contact#contact" className="btn-primary">
                   Start your project
                 </Link>
               )}

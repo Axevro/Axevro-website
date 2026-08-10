@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Footer from './Footer'
-import PageHero from './PageHero'
-import LinkedText from './LinkedText'
+import PageHero from '../ui/PageHero'
+import LinkedText from '../ui/LinkedText'
 
 const relatedLinks = [
   { label: 'Privacy Policy', to: '/privacy-policy' },
@@ -35,8 +35,15 @@ export default function LegalPage({ page }) {
               </p>
 
               <div className="space-y-8 sm:space-y-10">
-                {sections.map((section) => (
-                  <section key={section.heading} className="scroll-mt-28">
+                {sections.map((section, index) => (
+                  <motion.section
+                    key={section.heading}
+                    className="scroll-mt-28"
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.4, delay: index * 0.04 }}
+                  >
                     <h2 className="font-display text-[clamp(18px,2.5vw,24px)] font-semibold tracking-[-0.3px] text-ink">
                       {section.heading}
                     </h2>
@@ -71,7 +78,7 @@ export default function LegalPage({ page }) {
                         <LinkedText text={paragraph} />
                       </p>
                     ))}
-                  </section>
+                  </motion.section>
                 ))}
               </div>
 
@@ -79,7 +86,7 @@ export default function LegalPage({ page }) {
                 <p className="text-sm text-gray">
                   Need help or have a privacy request?{' '}
                   <Link
-                    to="/contact"
+                    to="/contact#contact"
                     className="font-semibold text-green-deep transition-colors hover:text-green"
                   >
                     Contact Axevro →
@@ -114,7 +121,7 @@ export default function LegalPage({ page }) {
 
                 <div className="mt-6 border-t border-line pt-5">
                   <Link
-                    to="/contact"
+                    to="/contact#contact"
                     className="inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-black px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-green"
                   >
                     Contact us

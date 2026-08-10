@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import SectionHeading from './SectionHeading'
+import SectionHeading from '../ui/SectionHeading'
 
 const skills = [
   {
@@ -55,11 +55,11 @@ export default function CloudDevOps() {
           {skills.map((skill, index) => (
             <motion.article
               key={skill.title}
-              initial={{ opacity: 0, y: 22 }}
+              initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.45, delay: index * 0.08 }}
-              whileHover={{ y: -6 }}
+              transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -8, transition: { duration: 0.22 } }}
               className="group relative flex h-full flex-col border border-white/12 bg-black/25 p-5 backdrop-blur-sm transition-colors hover:border-green-bright/45 hover:bg-black/40 sm:p-7"
             >
               <div className="absolute top-0 left-0 h-0.5 w-full origin-left scale-x-0 bg-[linear-gradient(90deg,var(--color-green-bright),var(--color-gold))] transition-transform duration-300 group-hover:scale-x-100" />

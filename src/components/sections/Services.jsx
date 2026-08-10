@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { services } from '../data/services'
-import SectionHeading from './SectionHeading'
-import { easeOut } from '../lib/motion'
+import { services } from '../../data/services'
+import SectionHeading from '../ui/SectionHeading'
+import { staggerContainer, revealItem, viewportOnce } from '../../lib/motion'
 
 export default function Services() {
   return (
@@ -14,15 +14,18 @@ export default function Services() {
           description="From a landing page to a full SaaS platform — product engineering plus cloud delivery, working from the same playbook."
         />
 
-        <div className="grid grid-cols-1 gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, index) => (
+        <motion.div
+          className="grid grid-cols-1 gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-3"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
+          {services.map((service) => (
             <motion.article
               key={service.slug}
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.45, delay: (index % 3) * 0.06, ease: easeOut }}
-              whileHover={{ y: -3 }}
+              variants={revealItem}
+              whileHover={{ y: -4, transition: { duration: 0.22 } }}
               className="group relative flex min-h-[240px] flex-col bg-white px-5 py-7 transition-colors hover:bg-bg-alt sm:min-h-[260px] sm:px-8 sm:py-[38px]"
             >
               <div className="absolute top-0 left-0 h-0.5 w-0 bg-[linear-gradient(90deg,var(--color-gold),var(--color-green))] transition-all duration-300 group-hover:w-full" />
@@ -30,7 +33,8 @@ export default function Services() {
                 <span className="font-mono text-xs text-gold-deep">{service.num}</span>
                 <motion.span
                   className="inline-flex h-9 w-9 items-center justify-center border border-green/15 bg-green/5 text-green transition-colors group-hover:border-green/30 group-hover:bg-green/10"
-                  whileHover={{ rotate: 6, scale: 1.05 }}
+                  whileHover={{ rotate: 8, scale: 1.06 }}
+                  transition={{ type: 'spring', stiffness: 320, damping: 18 }}
                 >
                   <span className="material-symbols-outlined text-[20px]">
                     {service.icon}
@@ -54,7 +58,7 @@ export default function Services() {
               </Link>
             </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

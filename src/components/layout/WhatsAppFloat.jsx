@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { getWhatsAppUrl } from '../data/contact'
+import { getWhatsAppUrl } from '../../data/contact'
 
 export default function WhatsAppFloat() {
   return (

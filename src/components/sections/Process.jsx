@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import SectionHeading from './SectionHeading'
-import { processSteps } from '../data/process'
-import { easeOut } from '../lib/motion'
+import SectionHeading from '../ui/SectionHeading'
+import { processSteps } from '../../data/process'
+import { revealItem, staggerContainer, viewportOnce } from '../../lib/motion'
 
 export default function Process() {
   return (
@@ -13,15 +13,15 @@ export default function Process() {
           title="A process built to remove guesswork"
         />
 
-        <div className="flex flex-col border-t border-line">
-          {processSteps.map((item, index) => (
-            <motion.div
-              key={item.slug}
-              initial={{ opacity: 0, x: -16 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.4, delay: index * 0.05, ease: easeOut }}
-            >
+        <motion.div
+          className="flex flex-col border-t border-line"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
+          {processSteps.map((item) => (
+            <motion.div key={item.slug} variants={revealItem}>
               <Link
                 to={`/process/${item.slug}`}
                 className="group grid grid-cols-[56px_1fr_24px] items-start gap-3 border-b border-line py-5 transition-all duration-200 hover:bg-bg-alt/70 hover:pl-1 sm:grid-cols-[90px_1fr_40px] sm:items-center sm:gap-7 sm:py-7 sm:hover:pl-2"
@@ -43,7 +43,7 @@ export default function Process() {
               </Link>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

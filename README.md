@@ -65,6 +65,7 @@ Docker · GitHub Actions · AWS · Authentication · SEO
 | `/process/cicd-cloud-deployment` | Process Step 04 |
 | `/process/maintenance` | Process Step 05 |
 | `/contact` | Contact form |
+| `/pricing` | Introductory pricing |
 | `/privacy-policy` | Privacy Policy |
 | `/terms-and-conditions` | Terms & Conditions |
 | `/cookies-policy` | Cookies Policy |
@@ -113,19 +114,38 @@ npm run lint
 
 ```text
 Axevro-website/
-├── public/                  # Static assets (logo, favicon)
+├── public/
+│   ├── brand/               # Logo mark, square OG image, favicon
+│   ├── images/              # Portfolio & studio photography
+│   ├── robots.txt
+│   └── sitemap.xml
 ├── src/
-│   ├── components/          # Shared UI and homepage sections
-│   ├── data/                # Service content and helpers
-│   ├── pages/               # Route-level pages (Home, Contact, ServiceDetail)
-│   ├── App.jsx              # Router configuration
-│   ├── main.jsx             # Application entry point
-│   └── index.css            # Tailwind + brand design tokens
+│   ├── components/
+│   │   ├── layout/          # Header, Footer, SEO, WhatsApp, ErrorBoundary
+│   │   ├── sections/        # Homepage sections (Hero, Services, Projects, …)
+│   │   └── ui/              # Reusable UI (Logo, PageHero, SafeImage, motion)
+│   ├── data/                # Services, process, pricing, contact, SEO copy
+│   ├── lib/                 # Motion helpers, smooth scroll
+│   ├── pages/               # Route pages (Home, Pricing, Contact, details, legal)
+│   ├── App.jsx              # Router + page transitions
+│   ├── main.jsx             # Entry point
+│   └── index.css            # Tailwind + brand tokens
 ├── index.html
 ├── vite.config.js
 ├── package.json
 └── README.md
 ```
+
+**Where things live**
+
+| Folder | Purpose |
+| --- | --- |
+| `src/pages/` | One file per route |
+| `src/components/sections/` | Homepage building blocks (including Projects) |
+| `src/components/layout/` | Shell chrome shared across routes |
+| `src/components/ui/` | Small reusable primitives |
+| `src/data/` | Content and config (no UI) |
+| `public/images/` | Project / portfolio visuals |
 
 ---
 
@@ -140,7 +160,8 @@ Axevro-website/
 
 **Logo**
 
-- Mark: `public/axevro-mark.png` (transparent gold + green AX)
+- Mark: `public/brand/axevro-mark.png` (transparent gold + green AX)
+- Square: `public/brand/axevro-mark-square.png` (favicon / OG)
 - Wordmark: rendered in UI beside the mark in a single horizontal lockup
 
 ---

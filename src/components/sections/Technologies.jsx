@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import SectionHeading from './SectionHeading'
+import SectionHeading from '../ui/SectionHeading'
 
 const featured = [
   { name: 'Docker', icon: 'deployed_code' },

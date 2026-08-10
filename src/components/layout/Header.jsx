@@ -1,17 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import Logo from './Logo'
-import { easeOut } from '../lib/motion'
+import Logo from '../ui/Logo'
+import { easeOut } from '../../lib/motion'
 
 const links = [
   { label: 'Home', to: '/', match: 'home' },
   { label: 'About', to: '/#about', match: 'about' },
   { label: 'Services', to: '/#services', match: 'services' },
-  { label: 'DevOps', to: '/#devops', match: 'devops' },
   { label: 'Pricing', to: '/pricing', match: 'pricing' },
   { label: 'Process', to: '/#process', match: 'process' },
-  { label: 'Contact', to: '/contact', match: 'contact' },
+  { label: 'Contact', to: '/contact#contact', match: 'contact' },
 ]
 
 const HOME_SECTION_IDS = [

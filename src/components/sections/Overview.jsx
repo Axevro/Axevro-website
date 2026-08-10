@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
-import SectionHeading from './SectionHeading'
+import SectionHeading from '../ui/SectionHeading'
+import SafeImage from '../ui/SafeImage'
+import { siteImages } from '../../data/images'
 
 const points = [
   'Senior engineers, no outsourced juniors',
@@ -47,26 +49,35 @@ export default function Overview() {
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.55 }}
-          className="relative aspect-[1/0.9] overflow-hidden border border-line-dark bg-black sm:aspect-[1/0.85]"
+          className="relative aspect-[4/3] overflow-hidden border border-line-dark bg-black sm:aspect-[1/0.85]"
         >
           <div className="absolute top-5 left-5 z-[2] h-8 w-8 border-t-2 border-l-2 border-gold sm:top-6 sm:left-6 sm:h-[34px] sm:w-[34px]" />
           <div className="absolute right-5 bottom-5 z-[2] h-8 w-8 border-r-2 border-b-2 border-green-bright/60 sm:right-6 sm:bottom-6" />
+
+          <SafeImage
+            src={siteImages.studio}
+            alt="Axevro studio workspace with product engineering setup"
+            className="absolute inset-0 h-full w-full object-cover"
+            fallbackClassName="object-contain p-16 opacity-80"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+
           <div
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(420px 260px at 30% 30%, rgba(201,162,39,0.18), transparent 60%), radial-gradient(380px 240px at 75% 70%, rgba(31,157,85,0.35), transparent 55%)',
+                'linear-gradient(180deg, rgba(10,11,13,0.15) 0%, rgba(10,11,13,0.72) 100%), radial-gradient(420px 260px at 30% 20%, rgba(201,162,39,0.18), transparent 60%)',
             }}
           />
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
-            <motion.img
-              src="/axevro-mark.png?v=4"
-              alt="Axevro mark"
-              className="h-28 w-28 object-contain drop-shadow-[0_18px_40px_rgba(201,162,39,0.28)] sm:h-36 sm:w-36 md:h-40 md:w-40"
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+
+          <div className="absolute inset-x-0 bottom-0 z-[2] flex flex-col items-start gap-2 p-5 sm:p-7">
+            <SafeImage
+              src={siteImages.mark}
+              alt=""
+              className="h-10 w-auto object-contain drop-shadow-[0_12px_28px_rgba(201,162,39,0.35)] sm:h-12"
+              loading="eager"
             />
-            <div className="font-display text-xl font-bold tracking-[0.2em] text-white">
+            <div className="font-display text-lg font-bold tracking-[0.18em] text-white sm:text-xl">
               AXEVRO
             </div>
             <div className="font-mono text-[10px] tracking-[0.18em] text-green-bright uppercase">

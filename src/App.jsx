@@ -1,8 +1,12 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import ScrollToTop from './components/ScrollToTop'
-import Header from './components/Header'
-import WhatsAppFloat from './components/WhatsAppFloat'
+import {
+  ScrollToTop,
+  Header,
+  SeoManager,
+  WhatsAppFloat,
+  ErrorBoundary,
+} from './components/layout'
 import Home from './pages/Home'
 import ServiceDetail from './pages/ServiceDetail'
 import ProcessDetail from './pages/ProcessDetail'
@@ -11,30 +15,33 @@ import Pricing from './pages/Pricing'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsAndConditions from './pages/TermsAndConditions'
 import CookiesPolicy from './pages/CookiesPolicy'
-import { easeOut } from './lib/motion'
+import { pageTransition } from './lib/motion'
 
 function AnimatedRoutes() {
   const location = useLocation()
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.38, ease: easeOut }}
+        initial={pageTransition.initial}
+        animate={pageTransition.animate}
+        exit={pageTransition.exit}
+        transition={pageTransition.transition}
       >
-        <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/services/:slug" element={<ServiceDetail />} />
-          <Route path="/process/:slug" element={<ProcessDetail />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-          <Route path="/cookies-policy" element={<CookiesPolicy />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/services/:slug" element={<ServiceDetail />} />
+            <Route path="/process/:slug" element={<ProcessDetail />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/cookies-policy" element={<CookiesPolicy />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </ErrorBoundary>
       </motion.div>
     </AnimatePresence>
   )
@@ -43,6 +50,7 @@ function AnimatedRoutes() {
 function App() {
   return (
     <BrowserRouter>
+      <SeoManager />
       <ScrollToTop />
       <Header />
       <AnimatedRoutes />

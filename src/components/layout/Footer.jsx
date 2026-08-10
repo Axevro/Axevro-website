@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import Logo from './Logo'
-import { getWhatsAppUrl } from '../data/contact'
+import Logo from '../ui/Logo'
+import { getWhatsAppUrl } from '../../data/contact'
 
 const quickLinks = [
   { label: 'About Us', to: '/#about' },
@@ -19,8 +19,8 @@ const serviceLinks = [
 const companyLinks = [
   { label: 'Stack', to: '/#stack' },
   { label: 'Pricing', to: '/pricing' },
-  { label: 'Contact', to: '/contact' },
-  { label: 'Get a Quote', to: '/contact' },
+  { label: 'Contact', to: '/contact#contact' },
+  { label: 'Get a Quote', to: '/contact#contact' },
 ]
 
 export default function Footer() {
