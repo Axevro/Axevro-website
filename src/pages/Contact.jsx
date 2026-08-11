@@ -6,6 +6,7 @@ import { Footer } from '../components/layout'
 import { PageHero } from '../components/ui'
 import { getWhatsAppUrl } from '../data/contact'
 import { validateContactPayload } from '../lib/validateContact'
+import { submitContactForm } from '../lib/submitContact'
 
 const initialForm = {
   name: '',
@@ -50,37 +51,18 @@ export default function Contact() {
     setSubmitting(true)
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          phone: form.phone.trim(),
-          email: form.email.trim(),
-          subject: form.subject.trim(),
-          message: form.message.trim(),
-          ax_hp_token: form.ax_hp_token,
-        }),
-      })
+      const result = await submitContactForm(form)
 
-      let data = null
-      try {
-        data = await response.json()
-      } catch {
-        data = null
-      }
-
-      if (!response.ok || !data?.ok) {
-        if (data?.errors) {
-          setErrors(data.errors)
-          toast.error(data.error || 'Please fix the highlighted fields.', {
+      if (!result.ok) {
+        if (result.errors) {
+          setErrors(result.errors)
+          toast.error(result.error || 'Please fix the highlighted fields.', {
             position: 'top-center',
           })
         } else {
           toast.error(
-            data?.error ||
-              data?.detail ||
-              'We could not send your message. Please try again or email axevro9@gmail.com.',
+            result.error ||
+              'We could not send your message right now. Please email axevro9@gmail.com.',
             { position: 'top-center' },
           )
         }
@@ -88,7 +70,8 @@ export default function Contact() {
       }
 
       const message =
-        data.message || 'Message delivered to Axevro. We will get back to you shortly.'
+        result.message ||
+        'Message delivered to Axevro. We will get back to you shortly.'
       setForm(initialForm)
       setSuccessMessage(message)
       toast.success(message, { position: 'top-center', duration: 6000 })

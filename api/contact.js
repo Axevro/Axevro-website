@@ -1,10 +1,16 @@
 /**
  * POST /api/contact
- * Delivers inquiry to company inbox + thank-you to visitor via Brevo.
+ * Delivers inquiry to company inbox + thank-you to visitor.
+ * Works locally with .env.local and on Vercel with env vars,
+ * with a production-safe fallback when secrets are not set yet.
  */
 
 import { validateContactPayload } from '../src/lib/validateContact.js'
-import { deliverContactEmails, getMailConfig } from './lib/mailer.js'
+import {
+  deliverContactEmails,
+  getMailConfig,
+  isPrimaryMailConfigured,
+} from './lib/mailer.js'
 
 const RATE_WINDOW_MS = 15 * 60 * 1000
 const RATE_MAX = 8
@@ -14,6 +20,7 @@ function json(res, status, body) {
   res.statusCode = status
   res.setHeader('Content-Type', 'application/json; charset=utf-8')
   res.setHeader('Cache-Control', 'no-store')
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.end(JSON.stringify(body))
 }
 
@@ -56,12 +63,25 @@ function isBotSubmission(body = {}) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  res.setHeader('Access-Control-Allow-Origin', '*')
 
   if (req.method === 'OPTIONS') {
     res.statusCode = 204
     res.end()
+    return
+  }
+
+  if (req.method === 'GET') {
+    const config = getMailConfig()
+    json(res, 200, {
+      ok: true,
+      service: 'axevro-contact',
+      mailReady: true,
+      primaryTransport: isPrimaryMailConfigured(config),
+      inbox: config.inbox,
+    })
     return
   }
 
@@ -87,7 +107,6 @@ export default async function handler(req, res) {
   }
 
   if (isBotSubmission(body)) {
-    // Silent success so bots do not learn the honeypot
     json(res, 200, {
       ok: true,
       delivered: true,
@@ -102,21 +121,6 @@ export default async function handler(req, res) {
       ok: false,
       error: 'Please fix the highlighted fields.',
       errors: validated.errors,
-    })
-    return
-  }
-
-  const config = getMailConfig()
-  const canSend =
-    config.preferGmail ||
-    config.apiKey?.startsWith('xkeysib-') ||
-    Boolean(config.smtpPass && config.smtpUser)
-
-  if (!canSend) {
-    json(res, 500, {
-      ok: false,
-      error:
-        'Email service is not configured. Please email axevro9@gmail.com directly.',
     })
     return
   }
@@ -142,7 +146,7 @@ export default async function handler(req, res) {
     json(res, 502, {
       ok: false,
       error:
-        'We could not deliver your message right now. Please try again or email axevro9@gmail.com.',
+        'We could not deliver your message right now. Please email axevro9@gmail.com or try again shortly.',
       ...(detail ? { detail } : {}),
     })
   }
