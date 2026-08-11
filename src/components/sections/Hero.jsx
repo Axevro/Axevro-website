@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { easeOut, staggerContainer, fadeUp } from '../../lib/motion'
 import SafeImage from '../ui/SafeImage'
 import { siteImages } from '../../data/images'
 
 const stats = [
-  { num: '120', suffix: '+', label: 'Projects delivered' },
-  { num: '98', suffix: '%', label: 'Client retention' },
-  { num: '30', suffix: '+', label: 'Technologies' },
-  { num: '24', suffix: '/7', label: 'Support' },
+  { num: '3', suffix: '', label: 'Live client products' },
+  { num: '48', suffix: 'h', label: 'Typical first reply' },
+  { num: '9', suffix: '+', label: 'Core service areas' },
+  { num: '5', suffix: '', label: 'Delivery stages' },
 ]
 
 const fadeUpCustom = {
@@ -21,6 +21,8 @@ const fadeUpCustom = {
 }
 
 export default function Hero() {
+  const reduceMotion = useReducedMotion()
+
   return (
     <section
       id="home"
@@ -35,13 +37,29 @@ export default function Hero() {
       />
       <motion.div
         className="pointer-events-none absolute -top-24 left-1/4 h-64 w-64 rounded-full bg-green/20 blur-[100px]"
-        animate={{ opacity: [0.35, 0.55, 0.35], scale: [1, 1.12, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        animate={
+          reduceMotion
+            ? { opacity: 0.45 }
+            : { opacity: [0.35, 0.55, 0.35], scale: [1, 1.12, 1] }
+        }
+        transition={
+          reduceMotion
+            ? undefined
+            : { duration: 8, repeat: Infinity, ease: 'easeInOut' }
+        }
       />
       <motion.div
         className="pointer-events-none absolute right-0 bottom-0 h-72 w-72 rounded-full bg-gold/15 blur-[110px]"
-        animate={{ opacity: [0.25, 0.45, 0.25], scale: [1, 1.08, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        animate={
+          reduceMotion
+            ? { opacity: 0.35 }
+            : { opacity: [0.25, 0.45, 0.25], scale: [1, 1.08, 1] }
+        }
+        transition={
+          reduceMotion
+            ? undefined
+            : { duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }
+        }
       />
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.035]"
@@ -102,7 +120,7 @@ export default function Hero() {
                     'linear-gradient(90deg, var(--color-gold), var(--color-green))',
                 }}
               />
-              <span className="font-mono text-[10px] tracking-[0.2em] text-gold-bright uppercase sm:text-[12px] sm:tracking-[0.22em]">
+              <span className="font-mono text-[10px] tracking-[0.14em] text-gold-bright uppercase sm:text-[12px] sm:tracking-[0.22em]">
                 Building Digital Excellence
               </span>
             </motion.div>
@@ -167,7 +185,11 @@ export default function Hero() {
                   View Pricing
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+              <motion.div
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="hidden min-[400px]:block"
+              >
                 <a
                   href="#services"
                   className="inline-flex w-full items-center justify-center gap-2 rounded-[2px] border border-white/18 px-6 py-3.5 text-[14px] font-semibold text-white/90 transition-colors hover:border-green-bright/70 hover:text-green-bright sm:w-auto sm:px-7 sm:py-4 sm:text-[15px]"
@@ -186,8 +208,12 @@ export default function Hero() {
           >
             <motion.div
               className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle,rgba(31,157,85,0.22),transparent_68%)] blur-2xl"
-              animate={{ opacity: [0.5, 0.85, 0.5] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+              animate={reduceMotion ? { opacity: 0.7 } : { opacity: [0.5, 0.85, 0.5] }}
+              transition={
+                reduceMotion
+                  ? undefined
+                  : { duration: 4.5, repeat: Infinity, ease: 'easeInOut' }
+              }
             />
             <div className="relative aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-[2px] border border-white/10 sm:max-w-[380px] lg:max-w-[420px]">
               <SafeImage
@@ -196,6 +222,9 @@ export default function Hero() {
                 className="absolute inset-0 h-full w-full object-cover"
                 fallbackClassName="object-contain p-16 opacity-60"
                 loading="eager"
+                fetchPriority="high"
+                width={840}
+                height={1050}
                 sizes="(max-width: 1024px) 90vw, 420px"
               />
               <div
@@ -219,12 +248,16 @@ export default function Hero() {
               />
               <div className="absolute inset-0 flex flex-col items-center justify-end px-6 pb-8 text-center sm:pb-10">
                 <motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
+                  animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
+                  transition={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          duration: 5,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                        }
+                  }
                 >
                   <SafeImage
                     src={siteImages.mark}

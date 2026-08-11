@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://axevro.com/sitemap.xml
+Disallow: /api/
+
+Sitemap: https://axevro.in/sitemap.xml

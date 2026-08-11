@@ -4,9 +4,22 @@ import { Toaster } from 'sonner'
 import './index.css'
 import App from './App.jsx'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-    <Toaster richColors position="top-right" closeButton />
-  </StrictMode>,
-)
+const rootEl = document.getElementById('root')
+
+if (rootEl) {
+  createRoot(rootEl).render(
+    <StrictMode>
+      <App />
+      <Toaster
+        richColors
+        position="top-center"
+        closeButton
+        toastOptions={{
+          style: {
+            marginTop: '4.5rem',
+          },
+        }}
+      />
+    </StrictMode>,
+  )
+}

@@ -15,7 +15,7 @@ export default function PageHero({
   showBack = true,
 }) {
   return (
-    <section className="relative overflow-hidden bg-black pt-12 pb-14 text-white sm:pt-16 sm:pb-20 md:pb-24">
+    <section className="relative overflow-hidden bg-black pt-8 pb-14 text-white sm:pt-12 sm:pb-20 md:pt-14 md:pb-24">
       <div
         className="pointer-events-none absolute inset-0"
         style={{

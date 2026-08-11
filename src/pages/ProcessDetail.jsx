@@ -1,15 +1,16 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Footer } from '../components/layout'
 import { PageHero } from '../components/ui'
 import { getProcessBySlug, processSteps } from '../data/process'
+import NotFound from './NotFound'
 
 export default function ProcessDetail() {
   const { slug } = useParams()
   const step = getProcessBySlug(slug)
 
   if (!step) {
-    return <Navigate to="/#process" replace />
+    return <NotFound />
   }
 
   const currentIndex = processSteps.findIndex((item) => item.slug === step.slug)
@@ -21,7 +22,7 @@ export default function ProcessDetail() {
 
   return (
     <>
-      <main>
+      <main id="main-content">
         <PageHero
           eyebrow={step.step}
           title={step.name}
@@ -310,26 +311,32 @@ export default function ProcessDetail() {
               {prev ? (
                 <Link
                   to={`/process/${prev.slug}`}
-                  className="inline-flex items-center justify-center gap-2 border border-line bg-white px-4 py-3 text-sm font-semibold text-ink-soft transition-colors hover:border-green/30 hover:text-green"
+                  className="inline-flex w-full min-w-0 items-center justify-center gap-2 border border-line bg-white px-4 py-3 text-sm font-semibold text-ink-soft transition-colors hover:border-green/30 hover:text-green sm:w-auto sm:max-w-full"
                 >
-                  <span className="material-symbols-outlined text-[16px]">
+                  <span className="material-symbols-outlined shrink-0 text-[16px]">
                     arrow_back
                   </span>
-                  Previous: {prev.name}
+                  <span className="min-w-0 text-center leading-snug">
+                    <span className="sm:hidden">Previous</span>
+                    <span className="hidden sm:inline">Previous: {prev.name}</span>
+                  </span>
                 </Link>
               ) : null}
               {next ? (
                 <Link
                   to={`/process/${next.slug}`}
-                  className="inline-flex items-center justify-center gap-2 border border-green/25 bg-green/8 px-4 py-3 text-sm font-semibold text-green-deep transition-colors hover:bg-green/15"
+                  className="inline-flex w-full min-w-0 items-center justify-center gap-2 border border-green/25 bg-green/8 px-4 py-3 text-sm font-semibold text-green-deep transition-colors hover:bg-green/15 sm:w-auto sm:max-w-full"
                 >
-                  Next: {next.name}
-                  <span className="material-symbols-outlined text-[16px]">
+                  <span className="min-w-0 text-center leading-snug">
+                    <span className="sm:hidden">Next</span>
+                    <span className="hidden sm:inline">Next: {next.name}</span>
+                  </span>
+                  <span className="material-symbols-outlined shrink-0 text-[16px]">
                     arrow_forward
                   </span>
                 </Link>
               ) : (
-                <Link to="/contact#contact" className="btn-primary">
+                <Link to="/contact#contact" className="btn-primary w-full justify-center sm:w-auto">
                   Start your project
                 </Link>
               )}

@@ -19,22 +19,29 @@ export default function SafeImage({
   onError: onErrorProp,
   ...rest
 }) {
-  const [currentSrc, setCurrentSrc] = useState(src || fallbackSrc)
+  const safeFallback = fallbackSrc || FALLBACK_SRC
+  const initialSrc = src || safeFallback
+  const [currentSrc, setCurrentSrc] = useState(initialSrc)
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
-    setCurrentSrc(src || fallbackSrc)
+    setCurrentSrc(src || safeFallback)
     setFailed(false)
-  }, [src, fallbackSrc])
+  }, [src, safeFallback])
 
   const handleError = (event) => {
-    if (!failed && currentSrc !== fallbackSrc) {
-      setFailed(true)
-      setCurrentSrc(fallbackSrc)
-    } else if (failed) {
-      event.currentTarget.style.visibility = 'hidden'
+    try {
+      if (!failed && currentSrc !== safeFallback) {
+        setFailed(true)
+        setCurrentSrc(safeFallback)
+      } else if (event?.currentTarget) {
+        event.currentTarget.style.visibility = 'hidden'
+        event.currentTarget.removeAttribute('src')
+      }
+      onErrorProp?.(event)
+    } catch {
+      // Swallow image recovery errors so UI never crashes.
     }
-    onErrorProp?.(event)
   }
 
   if (!currentSrc) return null
@@ -42,13 +49,14 @@ export default function SafeImage({
   return (
     <img
       src={currentSrc}
-      alt={alt}
+      alt={alt || ''}
       loading={loading}
       decoding={decoding}
       sizes={sizes}
       width={width}
       height={height}
       onError={handleError}
+      referrerPolicy="no-referrer-when-downgrade"
       className={`${className} ${failed ? fallbackClassName : ''}`.trim()}
       {...rest}
     />

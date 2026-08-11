@@ -18,19 +18,21 @@ import { Footer } from '../components/layout'
 export default function Home() {
   return (
     <>
-      <Hero />
-      <TrustBar />
-      <TrustedBy />
-      <Overview />
-      <Services />
-      <WhyChoose />
-      <Technologies />
-      <CloudDevOps />
-      <Process />
-      <PricingPreview />
-      <Projects />
-      <Testimonials />
-      <CTA />
+      <main id="main-content">
+        <Hero />
+        <TrustBar />
+        <TrustedBy />
+        <Overview />
+        <Services />
+        <WhyChoose />
+        <Technologies />
+        <CloudDevOps />
+        <Process />
+        <PricingPreview />
+        <Projects />
+        <Testimonials />
+        <CTA />
+      </main>
       <Footer />
     </>
   )

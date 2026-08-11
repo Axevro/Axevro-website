@@ -227,5 +227,6 @@ export const services = [
 ]
 
 export function getServiceBySlug(slug) {
+  if (!slug || typeof slug !== 'string') return undefined
   return services.find((service) => service.slug === slug)
 }

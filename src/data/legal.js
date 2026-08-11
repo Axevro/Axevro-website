@@ -2,7 +2,7 @@ export const legalPages = {
   privacy: {
     slug: 'privacy-policy',
     title: 'Privacy Policy',
-    updated: 'August 7, 2026',
+    updated: 'August 11, 2026',
     intro:
       'This Privacy Policy explains how Axevro collects, uses, stores, and protects personal information when you visit our website or contact us about our services.',
     sections: [
@@ -26,7 +26,7 @@ export const legalPages = {
           'Project-related information you choose to share',
         ],
         bodyAfter: [
-          'We may also collect limited technical data automatically, such as browser type, device information, approximate location, pages visited, and referring URLs, to improve site performance and security.',
+          'We may also collect limited technical data automatically, such as browser type, device information, and pages requested, to keep the site secure and reliable.',
         ],
       },
       {
@@ -35,8 +35,7 @@ export const legalPages = {
         list: [
           'Respond to inquiries and provide quotes',
           'Communicate about projects, services, and support',
-          'Improve website usability, performance, and content',
-          'Maintain security and prevent misuse',
+          'Operate and secure the website and contact form',
           'Comply with legal or regulatory obligations',
         ],
       },
@@ -49,7 +48,7 @@ export const legalPages = {
       {
         heading: '5. Sharing of information',
         body: [
-          'We do not sell your personal information. We may share data with trusted service providers who support hosting, analytics, communications, or operations, only as needed to deliver our services and subject to appropriate safeguards.',
+          'We do not sell your personal information. We may share data with trusted service providers who support hosting, email delivery, or operations — only as needed to deliver our services and subject to appropriate safeguards.',
           'We may also disclose information if required by law, regulation, legal process, or to protect the rights, safety, and security of Axevro, our users, or others.',
         ],
       },
@@ -192,62 +191,55 @@ export const legalPages = {
   cookies: {
     slug: 'cookies-policy',
     title: 'Cookies Policy',
-    updated: 'August 7, 2026',
+    updated: 'August 11, 2026',
     intro:
-      'This Cookies Policy explains how Axevro uses cookies and similar technologies on our website, and the choices available to you.',
+      'This Cookies Policy explains how Axevro uses cookies and similar technologies on our website.',
     sections: [
       {
         heading: '1. What are cookies?',
         body: [
-          'Cookies are small text files stored on your device when you visit a website. They help sites function, remember preferences, understand usage, and improve performance and security.',
-          'Similar technologies may include local storage, pixels, and session identifiers.',
+          'Cookies are small text files stored on your device when you visit a website. They can help sites function, remember preferences, and support security.',
+          'Similar technologies may include local storage and session identifiers.',
         ],
       },
       {
-        heading: '2. How we use cookies',
-        body: ['We may use cookies and similar technologies to:'],
+        heading: '2. How we use cookies today',
+        body: [
+          'Our website currently uses only essential technologies needed for basic operation — for example, delivering pages, routing within the app, and protecting the contact form from automated abuse.',
+          'We do not currently set analytics, advertising, or marketing cookies, and we do not run a third-party tracking pixel on this site.',
+        ],
+      },
+      {
+        heading: '3. Essential cookies / storage',
+        body: ['Essential technologies may be used to:'],
         list: [
           'Enable core site functionality and navigation',
-          'Remember preferences and improve user experience',
-          'Measure traffic, engagement, and page performance',
-          'Support security and abuse prevention',
-          'Understand which pages and content are most useful',
+          'Support security and abuse prevention on forms',
+          'Remember short-lived UI state required for the page to work',
         ],
       },
       {
-        heading: '3. Types of cookies we may use',
-        body: [],
-        list: [
-          'Essential cookies — required for basic site operation and security',
-          'Performance/analytics cookies — help us understand how the site is used',
-          'Functionality cookies — remember choices such as language or UI preferences',
-          'Marketing cookies — if used, help measure campaign effectiveness (only with consent where required)',
-        ],
-      },
-      {
-        heading: '4. Essential vs optional cookies',
+        heading: '4. Optional cookies',
         body: [
-          'Essential cookies are necessary for the website to operate and generally cannot be disabled through site settings without affecting functionality.',
-          'Optional cookies (such as analytics or marketing) are used only where appropriate and, where legally required, based on your consent or equivalent permission.',
+          'If we introduce analytics or marketing cookies in the future, we will update this policy and, where legally required, request your consent before enabling them.',
         ],
       },
       {
         heading: '5. Managing cookies',
         body: [
-          'You can control cookies through your browser settings. Most browsers allow you to block or delete cookies. If you disable cookies, some features of the site may not work as expected.',
-          'You can also use platform-level privacy controls offered by your browser or device.',
+          'You can control cookies through your browser settings. Most browsers allow you to block or delete cookies. Disabling essential storage may affect how the site works.',
         ],
       },
       {
-        heading: '6. Third-party cookies',
+        heading: '6. Third-party services',
         body: [
-          'Some cookies may be set by trusted third-party providers that help with hosting, analytics, or communications. Those providers process data according to their own privacy and cookie policies.',
+          'Pages may load fonts or icons from trusted providers (for example Google Fonts). Those providers may process connection data according to their own policies. We do not load marketing trackers through this site today.',
         ],
       },
       {
         heading: '7. Data and privacy',
         body: [
-          'Information collected through cookies is handled in accordance with our Privacy Policy. Where cookies process personal data, we apply appropriate safeguards and retention practices.',
+          'Information handled through our website is covered by our Privacy Policy.',
         ],
       },
       {

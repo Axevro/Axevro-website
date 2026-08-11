@@ -4,9 +4,9 @@ import SafeImage from '../ui/SafeImage'
 import { siteImages } from '../../data/images'
 
 const points = [
-  'Senior engineers, no outsourced juniors',
-  'Docker, GitHub Actions & AWS in every delivery',
-  "Post-launch support that doesn't disappear",
+  'Hands-on engineering with clear ownership',
+  'Modern stack: React, Flutter, Docker & cloud deploy',
+  'Introductory pricing with post-launch support options',
 ]
 
 export default function Overview() {

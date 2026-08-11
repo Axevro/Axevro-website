@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ScrollToTop,
@@ -6,6 +6,7 @@ import {
   SeoManager,
   WhatsAppFloat,
   ErrorBoundary,
+  SkipToContent,
 } from './components/layout'
 import Home from './pages/Home'
 import ServiceDetail from './pages/ServiceDetail'
@@ -15,6 +16,7 @@ import Pricing from './pages/Pricing'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsAndConditions from './pages/TermsAndConditions'
 import CookiesPolicy from './pages/CookiesPolicy'
+import NotFound from './pages/NotFound'
 import { pageTransition } from './lib/motion'
 
 function AnimatedRoutes() {
@@ -29,7 +31,7 @@ function AnimatedRoutes() {
         exit={pageTransition.exit}
         transition={pageTransition.transition}
       >
-        <ErrorBoundary>
+        <ErrorBoundary key={location.pathname}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/services/:slug" element={<ServiceDetail />} />
@@ -39,7 +41,7 @@ function AnimatedRoutes() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/cookies-policy" element={<CookiesPolicy />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>
       </motion.div>
@@ -50,11 +52,14 @@ function AnimatedRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <SeoManager />
-      <ScrollToTop />
-      <Header />
-      <AnimatedRoutes />
-      <WhatsAppFloat />
+      <ErrorBoundary>
+        <SkipToContent />
+        <SeoManager />
+        <ScrollToTop />
+        <Header />
+        <AnimatedRoutes />
+        <WhatsAppFloat />
+      </ErrorBoundary>
     </BrowserRouter>
   )
 }

@@ -49,7 +49,7 @@ export default function Services() {
               </p>
               <Link
                 to={`/services/${service.slug}`}
-                className="mt-5 inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-green-deep transition-all group-hover:gap-2.5"
+                className="mt-5 inline-flex min-h-11 items-center gap-1.5 py-2 text-[13.5px] font-semibold text-green-deep transition-all group-hover:gap-2.5"
               >
                 Learn more
                 <span className="material-symbols-outlined text-[16px]">

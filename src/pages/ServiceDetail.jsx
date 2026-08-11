@@ -1,22 +1,23 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Footer } from '../components/layout'
 import { PageHero } from '../components/ui'
 import { getServiceBySlug, services } from '../data/services'
+import NotFound from './NotFound'
 
 export default function ServiceDetail() {
   const { slug } = useParams()
   const service = getServiceBySlug(slug)
 
   if (!service) {
-    return <Navigate to="/#services" replace />
+    return <NotFound />
   }
 
   const related = services.filter((item) => item.slug !== service.slug).slice(0, 3)
 
   return (
     <>
-      <main>
+      <main id="main-content">
         <PageHero
           eyebrow={`Service ${service.num}`}
           title={service.title}
@@ -31,8 +32,8 @@ export default function ServiceDetail() {
                   arrow_forward
                 </span>
               </Link>
-              <Link to="/contact#contact" className="btn-secondary-dark">
-                Talk to us
+              <Link to="/pricing" className="btn-secondary-dark">
+                View pricing
               </Link>
             </>
           }
@@ -176,7 +177,7 @@ export default function ServiceDetail() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-black py-14 text-center text-white sm:py-20">
+        <section className="relative overflow-hidden bg-black py-14 pb-24 text-center text-white sm:py-20 sm:pb-20">
           <div className="pointer-events-none absolute inset-0 surface-glow opacity-80" />
           <div className="relative mx-auto max-w-[720px] px-4 sm:px-6">
             <motion.h2

@@ -82,11 +82,16 @@ export default function Header() {
 
   useEffect(() => {
     if (!open) return undefined
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     const onKey = (event) => {
       if (event.key === 'Escape') setOpen(false)
     }
     document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      document.removeEventListener('keydown', onKey)
+    }
   }, [open])
 
   useEffect(() => {
@@ -206,8 +211,9 @@ export default function Header() {
               type="button"
               className="inline-flex items-center justify-center rounded-[2px] border border-line p-2 transition-colors hover:border-green/40 hover:bg-green/5 lg:hidden"
               onClick={() => setOpen((v) => !v)}
-              aria-label="Toggle menu"
+              aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
+              aria-controls="mobile-nav"
             >
               <motion.span
                 key={open ? 'close' : 'menu'}
@@ -224,6 +230,7 @@ export default function Header() {
         <AnimatePresence>
           {open && (
             <motion.div
+              id="mobile-nav"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}

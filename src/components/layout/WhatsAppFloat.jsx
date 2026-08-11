@@ -13,7 +13,11 @@ export default function WhatsAppFloat() {
       transition={{ delay: 1, duration: 0.45 }}
       whileHover={{ y: -4, scale: 1.04 }}
       whileTap={{ scale: 0.96 }}
-      className="group fixed right-3 bottom-3 z-[60] inline-flex items-center gap-2 rounded-full bg-[#25D366] px-3.5 py-3.5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(37,211,102,0.4)] sm:right-6 sm:bottom-6 sm:px-4"
+      className="group fixed z-[60] inline-flex items-center gap-2 rounded-full bg-[#25D366] px-3.5 py-3.5 text-sm font-semibold text-white shadow-[0_12px_34px_rgba(37,211,102,0.4)] sm:px-4"
+      style={{
+        right: 'max(0.75rem, env(safe-area-inset-right))',
+        bottom: 'max(0.75rem, env(safe-area-inset-bottom))',
+      }}
     >
       <span className="relative flex">
         <span className="absolute inset-0 animate-ping rounded-full bg-white/35 opacity-60" />

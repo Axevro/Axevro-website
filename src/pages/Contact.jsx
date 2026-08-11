@@ -4,23 +4,23 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { Footer } from '../components/layout'
 import { PageHero } from '../components/ui'
-import {
-  getMailtoInquiryUrl,
-  getWhatsAppInquiryUrl,
-  getWhatsAppUrl,
-} from '../data/contact'
+import { getWhatsAppUrl } from '../data/contact'
+import { validateContactPayload } from '../lib/validateContact'
 
 const initialForm = {
   name: '',
   phone: '',
   email: '',
   subject: '',
+  message: '',
+  ax_hp_token: '', // honeypot — must stay empty
 }
 
 export default function Contact() {
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
   const updateField = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }))
@@ -30,55 +30,73 @@ export default function Contact() {
   }
 
   const validate = () => {
-    const next = {}
-
-    if (!form.name.trim()) next.name = 'Please enter your name.'
-    if (!form.phone.trim()) next.phone = 'Please enter your phone number.'
-    else if (!/^[+\d][\d\s()-]{6,}$/.test(form.phone.trim())) {
-      next.phone = 'Enter a valid phone number.'
+    const result = validateContactPayload(form)
+    if (!result.ok) {
+      setErrors(result.errors)
+      return false
     }
-    if (!form.email.trim()) next.email = 'Please enter your email.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      next.email = 'Enter a valid email address.'
-    }
-    if (!form.subject.trim()) next.subject = 'Please enter a subject.'
-
-    setErrors(next)
-    return Object.keys(next).length === 0
+    setErrors({})
+    return true
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+    setSuccessMessage('')
     if (!validate()) {
-      toast.error('Please fix the highlighted fields.')
+      toast.error('Please fix the highlighted fields.', { position: 'top-center' })
       return
     }
 
     setSubmitting(true)
 
     try {
-      const payload = {
-        name: form.name.trim(),
-        phone: form.phone.trim(),
-        email: form.email.trim(),
-        subject: form.subject.trim(),
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim(),
+          subject: form.subject.trim(),
+          message: form.message.trim(),
+          ax_hp_token: form.ax_hp_token,
+        }),
+      })
+
+      let data = null
+      try {
+        data = await response.json()
+      } catch {
+        data = null
       }
 
-      // Works on any network — opens WhatsApp with a prefilled inquiry.
-      // Email is a secondary path if WhatsApp is blocked.
-      const whatsappUrl = getWhatsAppInquiryUrl(payload)
-      const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
-
-      if (!opened) {
-        window.location.href = getMailtoInquiryUrl(payload)
-        toast.message('Opening your email app to send the inquiry…')
-      } else {
-        toast.success('Opening WhatsApp with your inquiry. Send the message to reach us.')
+      if (!response.ok || !data?.ok) {
+        if (data?.errors) {
+          setErrors(data.errors)
+          toast.error(data.error || 'Please fix the highlighted fields.', {
+            position: 'top-center',
+          })
+        } else {
+          toast.error(
+            data?.error ||
+              data?.detail ||
+              'We could not send your message. Please try again or email axevro9@gmail.com.',
+            { position: 'top-center' },
+          )
+        }
+        return
       }
 
+      const message =
+        data.message || 'Message delivered to Axevro. We will get back to you shortly.'
       setForm(initialForm)
+      setSuccessMessage(message)
+      toast.success(message, { position: 'top-center', duration: 6000 })
     } catch {
-      toast.error('Something went wrong. Please try WhatsApp or email us directly.')
+      toast.error(
+        'Network error. Please check your connection or email axevro9@gmail.com.',
+        { position: 'top-center' },
+      )
     } finally {
       setSubmitting(false)
     }
@@ -91,7 +109,7 @@ export default function Contact() {
 
   return (
     <>
-      <main>
+      <main id="main-content">
         <PageHero
           eyebrow="Contact"
           title="Tell us what you're"
@@ -113,7 +131,7 @@ export default function Contact() {
         />
 
         <section className="border-b border-line bg-bg-alt py-8 sm:py-10">
-          <div className="mx-auto grid max-w-[1180px] gap-5 px-4 sm:grid-cols-3 sm:gap-6 sm:px-6 md:px-8">
+          <div className="mx-auto grid max-w-[1180px] gap-5 px-4 sm:grid-cols-2 sm:gap-6 sm:px-6 md:grid-cols-3 md:px-8">
             {[
               {
                 icon: 'schedule',
@@ -214,15 +232,17 @@ export default function Contact() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.35, delay: index * 0.05 }}
                     whileHover={{ y: -3 }}
-                    className={`flex items-center gap-3 border border-line bg-white px-3.5 py-3.5 transition-all hover:border-green/30 hover:shadow-[0_10px_28px_rgba(10,11,13,0.06)] sm:px-4 ${item.color}`}
+                    className={`flex min-w-0 items-center gap-3 border border-line bg-white px-3.5 py-3.5 transition-all hover:border-green/30 hover:shadow-[0_10px_28px_rgba(10,11,13,0.06)] sm:px-4 ${item.color}`}
                   >
-                    <span className="inline-flex h-10 w-10 items-center justify-center border border-green/20 bg-green/8 text-green">
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center border border-green/20 bg-green/8 text-green">
                       <span className="material-symbols-outlined text-[20px]">
                         {item.icon}
                       </span>
                     </span>
-                    <span className="flex flex-col leading-tight">
-                      <span className="text-[15px] font-medium">{item.label}</span>
+                    <span className="flex min-w-0 flex-col leading-tight">
+                      <span className="break-all text-[14.5px] font-medium sm:text-[15px]">
+                        {item.label}
+                      </span>
                       <span className="mt-0.5 font-mono text-[10px] tracking-[1px] text-gray uppercase">
                         {item.note}
                       </span>
@@ -239,13 +259,50 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.08 }}
-              className="border border-line bg-white p-4 shadow-[0_18px_50px_rgba(10,11,13,0.06)] sm:p-6 md:p-8"
+              className="relative border border-line bg-white p-4 shadow-[0_18px_50px_rgba(10,11,13,0.06)] sm:p-6 md:p-8"
             >
               <div className="mb-6 border-b border-line pb-5">
                 <h3 className="font-display text-xl font-semibold">Send a message</h3>
                 <p className="mt-1 text-sm text-gray">
-                  Name, phone, email, and subject — that&apos;s all we need to start.
+                  Name, phone, email, subject, and a short project note — that&apos;s
+                  all we need to start.
                 </p>
+              </div>
+
+              {successMessage ? (
+                <div
+                  role="status"
+                  className="mb-6 border border-green/25 bg-green/8 px-4 py-4 text-center sm:px-5"
+                >
+                  <div className="mx-auto mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green/15 text-green">
+                    <span className="material-symbols-outlined text-[22px]">
+                      check_circle
+                    </span>
+                  </div>
+                  <p className="font-display text-[16px] font-semibold text-green-deep">
+                    Message sent successfully
+                  </p>
+                  <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-soft">
+                    {successMessage}
+                  </p>
+                </div>
+              ) : null}
+
+              {/* Honeypot — hidden; obscure name avoids browser autofill false positives */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -left-[10000px] top-auto h-px w-px overflow-hidden opacity-0"
+              >
+                <label htmlFor="ax_hp_token">Leave blank</label>
+                <input
+                  id="ax_hp_token"
+                  type="text"
+                  name="ax_hp_token"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.ax_hp_token}
+                  onChange={updateField('ax_hp_token')}
+                />
               </div>
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -261,9 +318,13 @@ export default function Contact() {
                     value={form.name}
                     onChange={updateField('name')}
                     className={fieldClass('name')}
+                    maxLength={80}
+                    required
                   />
                   {errors.name && (
-                    <span className="mt-1.5 block text-xs text-red-500">{errors.name}</span>
+                    <span className="mt-1.5 block text-xs text-red-500" role="alert">
+                      {errors.name}
+                    </span>
                   )}
                 </label>
 
@@ -275,13 +336,18 @@ export default function Contact() {
                     type="tel"
                     name="phone"
                     autoComplete="tel"
-                    placeholder="7084788119"
+                    inputMode="tel"
+                    placeholder="10-digit mobile number"
                     value={form.phone}
                     onChange={updateField('phone')}
                     className={fieldClass('phone')}
+                    maxLength={20}
+                    required
                   />
                   {errors.phone && (
-                    <span className="mt-1.5 block text-xs text-red-500">{errors.phone}</span>
+                    <span className="mt-1.5 block text-xs text-red-500" role="alert">
+                      {errors.phone}
+                    </span>
                   )}
                 </label>
 
@@ -297,9 +363,13 @@ export default function Contact() {
                     value={form.email}
                     onChange={updateField('email')}
                     className={fieldClass('email')}
+                    maxLength={120}
+                    required
                   />
                   {errors.email && (
-                    <span className="mt-1.5 block text-xs text-red-500">{errors.email}</span>
+                    <span className="mt-1.5 block text-xs text-red-500" role="alert">
+                      {errors.email}
+                    </span>
                   )}
                 </label>
 
@@ -314,10 +384,33 @@ export default function Contact() {
                     value={form.subject}
                     onChange={updateField('subject')}
                     className={fieldClass('subject')}
+                    maxLength={160}
+                    required
                   />
                   {errors.subject && (
-                    <span className="mt-1.5 block text-xs text-red-500">
+                    <span className="mt-1.5 block text-xs text-red-500" role="alert">
                       {errors.subject}
+                    </span>
+                  )}
+                </label>
+
+                <label className="block sm:col-span-2">
+                  <span className="mb-2 block font-mono text-[11px] tracking-[1px] text-gold-deep uppercase">
+                    Message
+                  </span>
+                  <textarea
+                    name="message"
+                    rows={5}
+                    placeholder="Tell us what you're building, timelines, and any must-haves..."
+                    value={form.message}
+                    onChange={updateField('message')}
+                    className={`${fieldClass('message')} min-h-[120px] resize-y`}
+                    maxLength={2000}
+                    required
+                  />
+                  {errors.message && (
+                    <span className="mt-1.5 block text-xs text-red-500" role="alert">
+                      {errors.message}
                     </span>
                   )}
                 </label>
@@ -328,24 +421,24 @@ export default function Contact() {
                 disabled={submitting}
                 className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-[2px] bg-gold px-6 py-4 text-sm font-bold text-black transition-all hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
               >
-                {submitting ? 'Opening…' : 'Send via WhatsApp'}
+                {submitting ? 'Sending…' : 'Send message'}
                 <span className="material-symbols-outlined text-[18px]">send</span>
               </button>
               <p className="mt-3 text-[12.5px] leading-relaxed text-gray">
-                Submits through WhatsApp so it works reliably on any Wi‑Fi or mobile
-                network. Prefer email?{' '}
+                Your message is delivered to{' '}
                 <a
-                  href={`mailto:axevro9@gmail.com`}
+                  href="mailto:axevro9@gmail.com"
                   className="font-semibold text-green-deep underline-offset-2 hover:underline"
                 >
                   axevro9@gmail.com
                 </a>
+                . Please use a real email and phone — temporary addresses are blocked.
               </p>
             </motion.form>
           </div>
         </section>
 
-        <section className="border-t border-line bg-black py-14 text-center text-white sm:py-16">
+        <section className="border-t border-line bg-black py-14 pb-24 text-center text-white sm:py-16 sm:pb-16">
           <div className="relative mx-auto max-w-[560px] px-4 sm:px-6">
             <h2 className="font-display text-[clamp(22px,4vw,32px)] font-semibold">
               Prefer WhatsApp?
@@ -357,7 +450,7 @@ export default function Contact() {
               href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary mt-6"
+              className="btn-primary mt-6 w-full max-w-xs sm:w-auto"
             >
               Chat on WhatsApp
             </a>

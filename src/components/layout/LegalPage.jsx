@@ -15,7 +15,7 @@ export default function LegalPage({ page }) {
 
   return (
     <>
-      <main>
+      <main id="main-content">
         <PageHero
           eyebrow="Legal"
           title={title}
@@ -100,14 +100,14 @@ export default function LegalPage({ page }) {
                 <h3 className="font-mono text-[11px] tracking-[1px] text-gold-deep uppercase">
                   Legal pages
                 </h3>
-                <nav className="mt-4 flex flex-col gap-2">
+                <nav className="mt-4 flex flex-col gap-1.5">
                   {relatedLinks.map((link) => {
                     const active = link.to.includes(slug)
                     return (
                       <Link
                         key={link.to}
                         to={link.to}
-                        className={`rounded-[2px] px-3 py-2.5 text-sm transition-colors ${
+                        className={`rounded-[2px] px-3 py-3 text-sm transition-colors ${
                           active
                             ? 'bg-green/10 font-semibold text-green-deep'
                             : 'text-ink-soft hover:bg-white hover:text-green'

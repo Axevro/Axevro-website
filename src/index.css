@@ -30,6 +30,12 @@
     scrollbar-color: #c9a227 #f3f0e8;
   }
 
+  @media (max-width: 639px) {
+    html {
+      scroll-padding-top: 64px;
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     html {
       /* Native fallback; in-app anchors use a faster JS smooth scroll */
@@ -186,6 +192,29 @@
 }
 
 @layer utilities {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
   .text-accent-gradient {
     background: linear-gradient(100deg, #c9a227 0%, #e8c468 42%, #4ade80 100%);
     -webkit-background-clip: text;
@@ -206,3 +235,15 @@
       radial-gradient(560px 260px at 100% 0%, rgba(201, 162, 39, 0.1), transparent 50%);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

@@ -31,7 +31,7 @@ function PriceCell({ label, value, emphasize = false }) {
 export default function Pricing() {
   return (
     <>
-      <main>
+      <main id="main-content">
         <PageHero
           eyebrow={pricingIntro.eyebrow}
           title="Professional work."
@@ -54,7 +54,7 @@ export default function Pricing() {
 
         {/* Trust / value strip */}
         <section className="border-b border-line bg-bg-alt py-10 sm:py-12">
-          <div className="mx-auto grid max-w-[1180px] gap-6 px-4 sm:grid-cols-3 sm:gap-8 sm:px-6 md:px-8">
+          <div className="mx-auto grid max-w-[1180px] gap-6 px-4 sm:grid-cols-2 sm:gap-8 sm:px-6 md:grid-cols-3 md:px-8">
             {pricingHighlights.map((item, index) => (
               <motion.div
                 key={item.title}
@@ -191,17 +191,17 @@ export default function Pricing() {
                       : 'border-line bg-white'
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-display text-[16px] font-semibold text-ink">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="min-w-0 font-display text-[16px] font-semibold text-ink">
                       {row.project}
                     </h3>
                     {row.featured ? (
-                      <span className="font-mono text-[9px] tracking-[0.8px] text-green uppercase">
+                      <span className="shrink-0 font-mono text-[9px] tracking-[0.8px] text-green uppercase">
                         Popular
                       </span>
                     ) : null}
                   </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3 border-t border-line pt-4">
+                  <div className="mt-4 grid grid-cols-1 gap-3 border-t border-line pt-4 min-[380px]:grid-cols-2">
                     <PriceCell label="Development" value={row.development} />
                     <PriceCell label="Deployment" value={row.deployment} />
                   </div>
@@ -216,12 +216,15 @@ export default function Pricing() {
               ))}
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 border border-line bg-bg-alt p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="mt-8 flex flex-col gap-4 border border-line bg-bg-alt p-5 md:flex-row md:items-center md:justify-between md:gap-6 md:p-6">
               <p className="max-w-xl text-[14px] leading-[1.65] text-ink-soft">
                 Found a fit? We&apos;ll confirm scope and timelines in a clear
                 proposal — usually within 48 hours.
               </p>
-              <Link to="/contact#contact" className="btn-primary shrink-0 justify-center">
+              <Link
+                to="/contact#contact"
+                className="btn-primary w-full shrink-0 justify-center md:w-auto"
+              >
                 Request a quote
               </Link>
             </div>
@@ -290,12 +293,12 @@ export default function Pricing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.03 }}
-                  className="flex items-center justify-between gap-3 border border-line bg-white px-4 py-3.5"
+                  className="flex flex-col gap-2 border border-line bg-white px-4 py-3.5 min-[400px]:flex-row min-[400px]:items-center min-[400px]:justify-between min-[400px]:gap-3"
                 >
-                  <span className="font-display text-[14px] font-semibold leading-snug">
+                  <span className="min-w-0 font-display text-[14px] font-semibold leading-snug">
                     {row.project}
                   </span>
-                  <span className="shrink-0 font-mono text-[13px] font-semibold tabular-nums text-green-deep">
+                  <span className="font-mono text-[13px] font-semibold tabular-nums text-green-deep min-[400px]:shrink-0 min-[400px]:text-right">
                     {row.price}
                   </span>
                 </motion.div>
@@ -318,7 +321,7 @@ export default function Pricing() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-black py-16 text-center text-white sm:py-20 md:py-24">
+        <section className="relative overflow-hidden bg-black py-16 pb-24 text-center text-white sm:py-20 sm:pb-20 md:py-24">
           <div className="pointer-events-none absolute inset-0 surface-glow opacity-90" />
           <div className="relative mx-auto max-w-[640px] px-4 sm:px-6">
             <motion.p

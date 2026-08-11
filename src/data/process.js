@@ -138,5 +138,6 @@ export const processSteps = [
 ]
 
 export function getProcessBySlug(slug) {
+  if (!slug || typeof slug !== 'string') return undefined
   return processSteps.find((step) => step.slug === slug)
 }
