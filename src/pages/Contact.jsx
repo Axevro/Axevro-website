@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { Footer } from '../components/layout'
@@ -22,6 +22,7 @@ export default function Contact() {
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+  const formOpenedAt = useRef(Date.now())
 
   const updateField = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }))
@@ -51,7 +52,10 @@ export default function Contact() {
     setSubmitting(true)
 
     try {
-      const result = await submitContactForm(form)
+      const result = await submitContactForm({
+        ...form,
+        form_opened_at: formOpenedAt.current,
+      })
 
       if (!result.ok) {
         if (result.errors) {
@@ -73,6 +77,7 @@ export default function Contact() {
         result.message ||
         'Message delivered to Axevro. We will get back to you shortly.'
       setForm(initialForm)
+      formOpenedAt.current = Date.now()
       setSuccessMessage(message)
       toast.success(message, { position: 'top-center', duration: 6000 })
     } catch {
@@ -271,7 +276,7 @@ export default function Contact() {
                 </div>
               ) : null}
 
-              {/* Honeypot — hidden; obscure name avoids browser autofill false positives */}
+              {/* Honeypot — off-screen; readonly until focus blocks mobile autofill */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute -left-[10000px] top-auto h-px w-px overflow-hidden opacity-0"
@@ -283,6 +288,13 @@ export default function Contact() {
                   name="ax_hp_token"
                   tabIndex={-1}
                   autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
+                  readOnly
+                  onFocus={(event) => {
+                    event.currentTarget.removeAttribute('readOnly')
+                  }}
                   value={form.ax_hp_token}
                   onChange={updateField('ax_hp_token')}
                 />

@@ -194,20 +194,97 @@ export function validateSubject(raw = '') {
   if (/^(test|testing|asdf|qwerty|xxx|dummy)$/i.test(subject)) {
     return { ok: false, error: 'Please enter a real project subject.' }
   }
+  if (looksLikeGibberish(subject)) {
+    return {
+      ok: false,
+      error: 'Please enter a clear subject in plain language (not random characters).',
+    }
+  }
   return { ok: true, value: subject }
 }
 
 export function validateMessage(raw = '') {
   const message = String(raw).trim().replace(/\s+/g, ' ')
   if (!message) return { ok: false, error: 'Please tell us a bit about your project.' }
-  if (message.length < 10) {
-    return { ok: false, error: 'Please add a few more details (at least ~10 characters).' }
+  if (message.length < 20) {
+    return {
+      ok: false,
+      error: 'Please add a bit more detail (at least ~20 characters).',
+    }
   }
   if (message.length > 2000) return { ok: false, error: 'Message is too long (max 2000 characters).' }
   if (/^(test|testing|asdf|qwerty|xxx|dummy)$/i.test(message)) {
     return { ok: false, error: 'Please describe your real project or question.' }
   }
+
+  const words = message.split(/\s+/).filter(Boolean)
+  if (words.length < 3) {
+    return {
+      ok: false,
+      error: 'Please write a short message with at least a few words.',
+    }
+  }
+
+  if (looksLikeGibberish(message)) {
+    return {
+      ok: false,
+      error:
+        'That message looks like random typing. Please describe your project in clear words.',
+    }
+  }
+
   return { ok: true, value: message }
+}
+
+/**
+ * Detect keyboard-smash / nonsense text while allowing normal short English.
+ */
+function looksLikeGibberish(text = '') {
+  const cleaned = String(text)
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  if (!cleaned) return true
+
+  const words = cleaned.split(' ').filter(Boolean)
+  if (!words.length) return true
+
+  let suspicious = 0
+  for (const word of words) {
+    if (word.length <= 2) continue
+
+    const vowels = (word.match(/[aeiou]/g) || []).length
+    const vowelRatio = vowels / word.length
+    const uniqueRatio = new Set(word).size / word.length
+    const onlyConsonants = /^[bcdfghjklmnpqrstvwxyz]+$/.test(word)
+    const repeatedRun = /([a-z])\1{3,}/.test(word)
+    const alternatingJunk = /^(?:[^aeiou]{2,})+$/.test(word) && vowelRatio < 0.2
+
+    if (repeatedRun) {
+      suspicious += 1
+      continue
+    }
+    if (word.length >= 5 && vowelRatio < 0.18) {
+      suspicious += 1
+      continue
+    }
+    if (word.length >= 6 && onlyConsonants) {
+      suspicious += 1
+      continue
+    }
+    if (word.length >= 8 && uniqueRatio <= 0.4) {
+      suspicious += 1
+      continue
+    }
+    if (word.length >= 7 && alternatingJunk) {
+      suspicious += 1
+    }
+  }
+
+  const scored = words.filter((w) => w.length > 2)
+  if (!scored.length) return true
+  return suspicious / scored.length >= 0.55
 }
 
 export function validateContactPayload(input = {}) {

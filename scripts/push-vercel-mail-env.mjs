@@ -1,6 +1,6 @@
-# Push local mail secrets to Vercel (Production + Preview)
-# Run once after: npx vercel login
-# Usage:  node scripts/push-vercel-mail-env.mjs
+// Push local mail secrets to Vercel (Production + Preview)
+// Run once after: npx vercel login
+// Usage:  node scripts/push-vercel-mail-env.mjs
 
 import { readFileSync, existsSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
@@ -27,7 +27,6 @@ function upsertEnv(key, value, environment) {
     return
   }
 
-  // Remove existing value silently if present
   spawnSync('npx', ['vercel', 'env', 'rm', key, environment, '-y'], {
     stdio: 'ignore',
     shell: true,

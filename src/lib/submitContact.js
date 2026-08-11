@@ -1,16 +1,26 @@
 import { CONTACT_EMAIL } from '../data/contact'
 import { validateContactPayload } from './validateContact'
 
+const REAL_DELIVERY = new Set(['gmail', 'smtp', 'api'])
+
 /**
- * Primary path: POST /api/contact (Gmail/Brevo on server).
- * Fallback: FormSubmit from the browser when production env is missing
- * or the API is unreachable — so mobile/production never soft-fails.
+ * Submit contact inquiry.
+ * Success is returned ONLY when the server confirms a real mail transport
+ * (Gmail / Brevo). No fake success, no unverified third-party fallbacks.
  */
 export async function submitContactForm(rawForm) {
   const validated = validateContactPayload(rawForm)
   if (!validated.ok) {
-    return { ok: false, errors: validated.errors, error: 'Please fix the highlighted fields.' }
+    return {
+      ok: false,
+      errors: validated.errors,
+      error: 'Please fix the highlighted fields.',
+    }
   }
+
+  // Honeypot: never send autofilled junk as a "bot signal" from controlled state
+  // if the user never touched it — strip unexpected values client-side only when empty expected.
+  const honeypot = String(rawForm.ax_hp_token || '').trim()
 
   const payload = {
     name: validated.value.name,
@@ -18,7 +28,8 @@ export async function submitContactForm(rawForm) {
     email: validated.value.email,
     subject: validated.value.subject,
     message: validated.value.message,
-    ax_hp_token: String(rawForm.ax_hp_token || ''),
+    ax_hp_token: honeypot,
+    form_opened_at: Number(rawForm.form_opened_at) || Date.now(),
   }
 
   try {
@@ -35,17 +46,6 @@ export async function submitContactForm(rawForm) {
       data = null
     }
 
-    if (response.ok && data?.ok) {
-      return {
-        ok: true,
-        message:
-          data.message ||
-          'Message delivered to Axevro. We will get back to you shortly.',
-        via: data.meta?.inboxVia || 'api',
-      }
-    }
-
-    // Validation errors from API — do not fall back
     if (data?.errors) {
       return {
         ok: false,
@@ -54,8 +54,7 @@ export async function submitContactForm(rawForm) {
       }
     }
 
-    // Rate limit / method issues — surface as-is
-    if (response.status === 429 || response.status === 405) {
+    if (response.status === 429) {
       return {
         ok: false,
         error:
@@ -63,76 +62,35 @@ export async function submitContactForm(rawForm) {
           'Too many requests. Please wait a few minutes and try again.',
       }
     }
-  } catch {
-    // Network / API down — continue to fallback
-  }
 
-  return sendViaFormSubmitFallback(validated.value)
-}
+    const via = data?.meta?.inboxVia
+    const delivered =
+      response.ok &&
+      data?.ok === true &&
+      data?.delivered === true &&
+      REAL_DELIVERY.has(via)
 
-async function sendViaFormSubmitFallback(data) {
-  const inbox = CONTACT_EMAIL || 'axevro9@gmail.com'
-  const firstName = data.name.split(' ')[0] || data.name
-  const autoresponse = [
-    `Hi ${firstName},`,
-    '',
-    'Thank you for connecting with Axevro.',
-    'We have received your message and will respond within 48 hours.',
-    '',
-    `Subject: ${data.subject}`,
-    data.message ? `Message: ${data.message}` : '',
-    '',
-    'Warm regards,',
-    'Team Axevro',
-    inbox,
-  ]
-    .filter(Boolean)
-    .join('\n')
+    if (delivered) {
+      return {
+        ok: true,
+        message:
+          data.message ||
+          'Message delivered to Axevro. We will get back to you shortly.',
+        via,
+      }
+    }
 
-  const response = await fetch(
-    `https://formsubmit.co/ajax/${encodeURIComponent(inbox)}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        subject: data.subject,
-        message: data.message,
-        _replyto: data.email,
-        _subject: `New inquiry from ${data.name}: ${data.subject}`,
-        _template: 'table',
-        _captcha: 'false',
-        _autoresponse: autoresponse,
-      }),
-    },
-  )
-
-  let parsed = null
-  try {
-    parsed = await response.json()
-  } catch {
-    parsed = null
-  }
-
-  if (!response.ok || parsed?.success === false || parsed?.success === 'false') {
-    const needsActivation = /activat/i.test(String(parsed?.message || ''))
     return {
       ok: false,
-      error: needsActivation
-        ? 'Almost ready — please ask Axevro to activate form delivery, or email axevro9@gmail.com directly.'
-        : parsed?.message ||
-          'We could not send your message right now. Please email axevro9@gmail.com.',
+      error:
+        data?.error ||
+        data?.detail ||
+        `We could not deliver your message right now. Please email ${CONTACT_EMAIL}.`,
     }
-  }
-
-  return {
-    ok: true,
-    message: 'Message delivered to Axevro. We will get back to you shortly.',
-    via: 'formsubmit',
+  } catch {
+    return {
+      ok: false,
+      error: `Network error. Please check your connection or email ${CONTACT_EMAIL}.`,
+    }
   }
 }

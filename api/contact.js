@@ -1,8 +1,7 @@
 /**
  * POST /api/contact
  * Delivers inquiry to company inbox + thank-you to visitor.
- * Works locally with .env.local and on Vercel with env vars,
- * with a production-safe fallback when secrets are not set yet.
+ * Returns success only after a real Gmail/Brevo send confirms.
  */
 
 import { validateContactPayload } from '../src/lib/validateContact.js'
@@ -15,6 +14,7 @@ import {
 const RATE_WINDOW_MS = 15 * 60 * 1000
 const RATE_MAX = 8
 const rateMap = new Map()
+const REAL_DELIVERY = new Set(['gmail', 'smtp', 'api'])
 
 function json(res, status, body) {
   res.statusCode = status
@@ -57,9 +57,30 @@ async function readJsonBody(req) {
   return JSON.parse(raw)
 }
 
-function isBotSubmission(body = {}) {
-  const traps = [body.ax_hp_token, body.website_url, body.fax_number]
-  return traps.some((value) => String(value || '').trim().length > 0)
+/**
+ * Bot detection that avoids Android autofill false positives.
+ * - Honeypot filled + very fast submit => bot
+ * - Honeypot filled + human timing => ignore honeypot (autofill)
+ * - Extremely fast submit without honeypot => soft bot signal
+ */
+function shouldDropAsBot(body = {}) {
+  const honeypotFilled = [body.ax_hp_token, body.website_url, body.fax_number].some(
+    (value) => String(value || '').trim().length > 0,
+  )
+  const openedAt = Number(body.form_opened_at) || 0
+  const elapsed = openedAt > 0 ? Date.now() - openedAt : null
+
+  if (elapsed != null && elapsed >= 0 && elapsed < 1200) {
+    return true
+  }
+
+  if (honeypotFilled) {
+    // Autofill often fills hidden fields on mobile; only treat as bot if rushed.
+    if (elapsed == null || elapsed < 4000) return true
+    return false
+  }
+
+  return false
 }
 
 export default async function handler(req, res) {
@@ -75,11 +96,12 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     const config = getMailConfig()
+    const primary = isPrimaryMailConfigured(config)
     json(res, 200, {
       ok: true,
       service: 'axevro-contact',
-      mailReady: true,
-      primaryTransport: isPrimaryMailConfigured(config),
+      mailReady: primary,
+      primaryTransport: primary,
       inbox: config.inbox,
     })
     return
@@ -106,11 +128,12 @@ export default async function handler(req, res) {
     return
   }
 
-  if (isBotSubmission(body)) {
+  if (shouldDropAsBot(body)) {
+    // Silent accept for bots only — client requires meta.inboxVia, so UI won't fake-success.
     json(res, 200, {
       ok: true,
-      delivered: true,
-      message: 'Message delivered to Axevro. We will get back to you shortly.',
+      delivered: false,
+      message: 'Accepted.',
     })
     return
   }
@@ -125,8 +148,29 @@ export default async function handler(req, res) {
     return
   }
 
+  const config = getMailConfig()
+  if (!isPrimaryMailConfigured(config)) {
+    json(res, 503, {
+      ok: false,
+      delivered: false,
+      error:
+        'Mail delivery is temporarily unavailable. Please email axevro9@gmail.com or message us on WhatsApp.',
+    })
+    return
+  }
+
   try {
     const delivery = await deliverContactEmails(validated.value)
+
+    if (!REAL_DELIVERY.has(delivery.inboxVia)) {
+      json(res, 502, {
+        ok: false,
+        delivered: false,
+        error:
+          'We could not confirm email delivery. Please email axevro9@gmail.com directly.',
+      })
+      return
+    }
 
     json(res, 200, {
       ok: true,
@@ -134,6 +178,7 @@ export default async function handler(req, res) {
       message: 'Message delivered to Axevro. We will get back to you shortly.',
       meta: {
         inboxVia: delivery.inboxVia,
+        replyVia: delivery.replyVia,
         replySent: Boolean(delivery.replyId),
       },
     })
@@ -145,6 +190,7 @@ export default async function handler(req, res) {
 
     json(res, 502, {
       ok: false,
+      delivered: false,
       error:
         'We could not deliver your message right now. Please email axevro9@gmail.com or try again shortly.',
       ...(detail ? { detail } : {}),

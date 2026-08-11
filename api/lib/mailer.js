@@ -290,7 +290,6 @@ async function sendViaSmtp(config, message) {
  * 1) Gmail App Password (best for @gmail.com inboxes)
  * 2) Brevo REST API (xkeysib-...)
  * 3) Brevo SMTP (xsmtpsib-...)
- * 4) FormSubmit fallback (works on production even without env secrets)
  */
 export function isPrimaryMailConfigured(config = getMailConfig()) {
   return Boolean(
@@ -298,79 +297,6 @@ export function isPrimaryMailConfigured(config = getMailConfig()) {
       config.apiKey?.startsWith('xkeysib-') ||
       (config.smtpPass && config.smtpUser),
   )
-}
-
-async function sendViaFormSubmit(config, data) {
-  const inbox = config.inbox || 'axevro9@gmail.com'
-  const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(inbox)}`
-  const firstName = data.name.split(' ')[0] || data.name
-  const autoresponse = [
-    `Hi ${firstName},`,
-    '',
-    `Thank you for connecting with ${config.companyName}.`,
-    'We have received your message and will respond within 48 hours.',
-    '',
-    `Subject: ${data.subject}`,
-    data.message ? `Message: ${data.message}` : '',
-    '',
-    'Warm regards,',
-    `Team ${config.companyName}`,
-    inbox,
-  ]
-    .filter(Boolean)
-    .join('\n')
-
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), 20000)
-
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      signal: controller.signal,
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        subject: data.subject,
-        message: data.message || '',
-        _replyto: data.email,
-        _subject: `New inquiry from ${data.name}: ${data.subject}`,
-        _template: 'table',
-        _captcha: 'false',
-        _autoresponse: autoresponse,
-      }),
-    })
-
-    const text = await response.text()
-    let parsed = null
-    try {
-      parsed = text ? JSON.parse(text) : null
-    } catch {
-      parsed = { raw: text }
-    }
-
-    if (!response.ok || parsed?.success === false || parsed?.success === 'false') {
-      throw new Error(
-        parsed?.message ||
-          parsed?.error ||
-          `Form delivery failed with status ${response.status}`,
-      )
-    }
-
-    return {
-      inboxId: parsed?.message || 'formsubmit-ok',
-      inboxVia: 'formsubmit',
-      replyId: 'formsubmit-autoresponse',
-      replyVia: 'formsubmit',
-      senderUsed: inbox,
-    }
-  } finally {
-    clearTimeout(timer)
-  }
 }
 
 export async function sendMail(config, message) {
@@ -410,78 +336,68 @@ export async function deliverContactEmails(data) {
   const config = getMailConfig()
 
   if (!config.inbox) throw new Error('CONTACT_INBOX is not configured.')
-
-  const errors = []
-
-  if (isPrimaryMailConfigured(config)) {
-    try {
-      const fromEmail = config.preferGmail ? config.gmailUser : config.senderEmail
-      if (!fromEmail) throw new Error('No sender email configured.')
-
-      const inboxResult = await sendMail(config, {
-        kind: 'inquiry',
-        fromName: config.senderName,
-        fromEmail,
-        to: [{ name: config.companyName, email: config.inbox }],
-        replyToName: data.name,
-        replyToEmail: data.email,
-        subject: `New inquiry from ${data.name}: ${data.subject}`,
-        html: buildInboxHtml(data),
-        text: [
-          'New client inquiry from axevro.in',
-          '',
-          `Name: ${data.name}`,
-          `Email: ${data.email}`,
-          `Phone: ${data.phone}`,
-          `Subject: ${data.subject}`,
-          '',
-          data.message || '',
-          '',
-          'Reply to this email to contact the client.',
-        ].join('\n'),
-      })
-
-      const replyResult = await sendMail(config, {
-        kind: 'thankyou',
-        fromName: config.senderName,
-        fromEmail,
-        to: [{ name: data.name, email: data.email }],
-        replyToName: config.companyName,
-        replyToEmail: config.inbox,
-        subject: `Thank you for connecting with ${config.companyName}`,
-        html: buildThankYouHtml(data, config.companyName, config.inbox),
-        text: [
-          `Hi ${data.name.split(' ')[0] || data.name},`,
-          '',
-          `Thank you for connecting with ${config.companyName}.`,
-          'We have received your message and will respond within 48 hours.',
-          '',
-          `Subject: ${data.subject}`,
-          data.message ? `Message: ${data.message}` : '',
-          '',
-          `Warm regards,`,
-          `Team ${config.companyName}`,
-          config.inbox,
-        ].join('\n'),
-      })
-
-      return {
-        inboxId: inboxResult.id,
-        inboxVia: inboxResult.via,
-        replyId: replyResult.id,
-        replyVia: replyResult.via,
-        senderUsed: fromEmail,
-      }
-    } catch (error) {
-      errors.push(error.message)
-    }
+  if (!isPrimaryMailConfigured(config)) {
+    throw new Error(
+      'Mail is not configured on the server. Set GMAIL_APP_PASSWORD (or Brevo SMTP) in Vercel env.',
+    )
   }
 
-  try {
-    return await sendViaFormSubmit(config, data)
-  } catch (error) {
-    errors.push(`Fallback: ${error.message}`)
-    throw new Error(errors.filter(Boolean).join(' | '))
+  const fromEmail = config.preferGmail ? config.gmailUser : config.senderEmail
+  if (!fromEmail) throw new Error('No sender email configured.')
+
+  const inboxResult = await sendMail(config, {
+    kind: 'inquiry',
+    fromName: config.senderName,
+    fromEmail,
+    to: [{ name: config.companyName, email: config.inbox }],
+    replyToName: data.name,
+    replyToEmail: data.email,
+    subject: `New inquiry from ${data.name}: ${data.subject}`,
+    html: buildInboxHtml(data),
+    text: [
+      'New client inquiry from axevro.in',
+      '',
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone}`,
+      `Subject: ${data.subject}`,
+      '',
+      data.message || '',
+      '',
+      'Reply to this email to contact the client.',
+    ].join('\n'),
+  })
+
+  const replyResult = await sendMail(config, {
+    kind: 'thankyou',
+    fromName: config.senderName,
+    fromEmail,
+    to: [{ name: data.name, email: data.email }],
+    replyToName: config.companyName,
+    replyToEmail: config.inbox,
+    subject: `Thank you for connecting with ${config.companyName}`,
+    html: buildThankYouHtml(data, config.companyName, config.inbox),
+    text: [
+      `Hi ${data.name.split(' ')[0] || data.name},`,
+      '',
+      `Thank you for connecting with ${config.companyName}.`,
+      'We have received your message and will respond within 48 hours.',
+      '',
+      `Subject: ${data.subject}`,
+      data.message ? `Message: ${data.message}` : '',
+      '',
+      `Warm regards,`,
+      `Team ${config.companyName}`,
+      config.inbox,
+    ].join('\n'),
+  })
+
+  return {
+    inboxId: inboxResult.id,
+    inboxVia: inboxResult.via,
+    replyId: replyResult.id,
+    replyVia: replyResult.via,
+    senderUsed: fromEmail,
   }
 }
 
