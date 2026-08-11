@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process'
 function loadEnvLocal() {
   const path = '.env.local'
   if (!existsSync(path)) {
-    throw new Error('Missing .env.local — create it from .env.example first.')
+    throw new Error('Missing .env.local — create it locally with GMAIL_USER and GMAIL_APP_PASSWORD.')
   }
   const out = {}
   for (const line of readFileSync(path, 'utf8').split(/\r?\n/)) {
