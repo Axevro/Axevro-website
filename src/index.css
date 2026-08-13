@@ -101,6 +101,29 @@
   a {
     color: inherit;
     text-decoration: none;
+    cursor: pointer;
+  }
+
+  button,
+  [role='button'],
+  summary,
+  label[for],
+  input[type='submit'],
+  input[type='button'],
+  input[type='reset'],
+  input[type='file'],
+  input[type='checkbox'],
+  input[type='radio'],
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled='true'],
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    cursor: not-allowed;
   }
 
   ::selection {

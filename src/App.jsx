@@ -12,6 +12,7 @@ import Home from './pages/Home'
 import ServiceDetail from './pages/ServiceDetail'
 import ProcessDetail from './pages/ProcessDetail'
 import Contact from './pages/Contact'
+import Careers from './pages/Careers'
 import Pricing from './pages/Pricing'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsAndConditions from './pages/TermsAndConditions'
@@ -37,6 +38,7 @@ function AnimatedRoutes() {
             <Route path="/services/:slug" element={<ServiceDetail />} />
             <Route path="/process/:slug" element={<ProcessDetail />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/careers" element={<Careers />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />

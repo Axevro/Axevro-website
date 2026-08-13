@@ -9,7 +9,7 @@ const links = [
   { label: 'About', to: '/#about', match: 'about' },
   { label: 'Services', to: '/#services', match: 'services' },
   { label: 'Pricing', to: '/pricing', match: 'pricing' },
-  { label: 'Process', to: '/#process', match: 'process' },
+  { label: 'Careers', to: '/careers', match: 'careers' },
   { label: 'Contact', to: '/contact#contact', match: 'contact' },
 ]
 
@@ -28,6 +28,7 @@ const HOME_SECTION_IDS = [
 
 function resolveActiveMatch(pathname, hash, scrollSection) {
   if (pathname.startsWith('/pricing')) return 'pricing'
+  if (pathname.startsWith('/careers')) return 'careers'
   if (pathname.startsWith('/contact')) return 'contact'
   if (pathname.startsWith('/services')) return 'services'
   if (pathname.startsWith('/process')) return 'process'

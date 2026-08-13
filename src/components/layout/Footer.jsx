@@ -19,8 +19,8 @@ const serviceLinks = [
 const companyLinks = [
   { label: 'Stack', to: '/#stack' },
   { label: 'Portfolio', to: '/#portfolio' },
+  { label: 'Careers', to: '/careers' },
   { label: 'Contact', to: '/contact#contact' },
-  { label: 'Privacy', to: '/privacy-policy' },
 ]
 
 function FooterHeading({ children }) {
@@ -104,14 +104,8 @@ export default function Footer() {
             >
               <span>7084788119</span>
               <span className="font-mono text-[10px] tracking-[1px] text-gold-bright/80 uppercase">
-                Primary
+                Phone
               </span>
-            </a>
-            <a
-              href="tel:+919693174749"
-              className="py-1.5 text-[14px] font-medium text-green-bright transition-colors hover:text-gold-bright hover:underline sm:text-sm"
-            >
-              9693174749
             </a>
           </div>
 

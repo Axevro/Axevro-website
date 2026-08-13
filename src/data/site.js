@@ -25,6 +25,10 @@ export const SITE = {
     'SEO',
     'software company India',
     'introductory pricing',
+    'careers',
+    'jobs',
+    'business development executive',
+    'BDE jobs',
   ],
 }
 

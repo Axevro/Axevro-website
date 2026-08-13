@@ -4,6 +4,7 @@ import { SITE, absoluteUrl, defaultSeo } from '../../data/site'
 import { getServiceBySlug, services } from '../../data/services'
 import { getProcessBySlug, processSteps } from '../../data/process'
 import { portfolioProjects } from '../../data/images'
+import { CAREER_ROLES } from '../../data/careers'
 
 function upsertMeta(attr, key, content) {
   if (content == null || content === '') return
@@ -65,6 +66,16 @@ function resolveSeo(pathname) {
       description:
         'Contact Axevro for a project quote. Reach us by email, phone, or WhatsApp — most replies within 48 hours.',
       path: '/contact',
+      robots: 'index, follow, max-image-preview:large',
+    }
+  }
+
+  if (path === '/careers') {
+    return {
+      title: `Careers & Jobs — ${SITE.name}`,
+      description:
+        'Join Axevro. Open roles: Business Development Executive (BDE), Full-Stack, React, Flutter, UI/UX, and open applications. Apply with your resume online.',
+      path: '/careers',
       robots: 'index, follow, max-image-preview:large',
     }
   }
@@ -250,13 +261,6 @@ export default function SeoManager() {
           areaServed: 'IN',
           availableLanguage: ['English', 'Hindi'],
         },
-        {
-          '@type': 'ContactPoint',
-          telephone: SITE.phoneWhatsApp,
-          contactType: 'customer support',
-          areaServed: 'IN',
-          availableLanguage: ['English', 'Hindi'],
-        },
       ],
     })
 
@@ -343,6 +347,41 @@ export default function SeoManager() {
         url: absoluteUrl('/pricing'),
         isPartOf: { '@id': `${SITE.url}/#website` },
         about: { '@id': `${SITE.url}/#organization` },
+      })
+    } else if (pathname === '/careers') {
+      const posted = new Date().toISOString().slice(0, 10)
+      upsertJsonLd('axevro-page-schema', {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        '@id': absoluteUrl('/careers'),
+        name: seo.title,
+        description: seo.description,
+        url: absoluteUrl('/careers'),
+        isPartOf: { '@id': `${SITE.url}/#website` },
+        about: { '@id': `${SITE.url}/#organization` },
+        inLanguage: 'en-IN',
+        mainEntity: CAREER_ROLES.filter((role) => role.id !== 'open').map(
+          (role) => ({
+            '@type': 'JobPosting',
+            title: role.title,
+            description: role.summary,
+            datePosted: posted,
+            employmentType: role.employmentType || 'OTHER',
+            hiringOrganization: {
+              '@type': 'Organization',
+              name: SITE.name,
+              sameAs: `${SITE.url}/`,
+              logo: absoluteUrl('/brand/axevro-mark.png'),
+            },
+            jobLocationType: 'TELECOMMUTE',
+            applicantLocationRequirements: {
+              '@type': 'Country',
+              name: 'India',
+            },
+            directApply: true,
+            url: absoluteUrl('/careers#apply'),
+          }),
+        ),
       })
     } else if (seo.step) {
       upsertJsonLd('axevro-page-schema', {

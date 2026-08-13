@@ -4,12 +4,17 @@ import tailwindcss from '@tailwindcss/vite'
 
 function contactApiDevPlugin() {
   return {
-    name: 'axevro-contact-api-dev',
+    name: 'axevro-api-dev',
     enforce: 'pre',
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url?.split('?')[0]
-        if (url !== '/api/contact') {
+        const handlers = {
+          '/api/contact': '/api/contact.js',
+          '/api/career': '/api/career.js',
+        }
+        const modulePath = handlers[url]
+        if (!modulePath) {
           next()
           return
         }
@@ -17,8 +22,7 @@ function contactApiDevPlugin() {
         if (res.writableEnded) return
 
         try {
-          // Always reload latest handler + env during local development
-          const mod = await server.ssrLoadModule('/api/contact.js')
+          const mod = await server.ssrLoadModule(modulePath)
           await mod.default(req, res)
         } catch (error) {
           if (res.writableEnded) return
@@ -28,7 +32,7 @@ function contactApiDevPlugin() {
             JSON.stringify({
               ok: false,
               error:
-                'Local contact API failed. Restart npm run dev and check .env.local.',
+                'Local API failed. Restart npm run dev and check .env.local.',
               detail: error?.message,
             }),
           )

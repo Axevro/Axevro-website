@@ -23,6 +23,7 @@ export const legalPages = {
           'Phone number',
           'Email address',
           'Subject and message details from contact forms',
+          'Career applications including name, phone, email, role, and resume files',
           'Project-related information you choose to share',
         ],
         bodyAfter: [

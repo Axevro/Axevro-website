@@ -41,6 +41,9 @@ export default function NotFound() {
             className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-[#9BA0A8]"
             aria-label="Helpful links"
           >
+            <Link to="/careers" className="transition-colors hover:text-gold-bright">
+              Careers
+            </Link>
             <Link to="/pricing" className="transition-colors hover:text-gold-bright">
               Pricing
             </Link>

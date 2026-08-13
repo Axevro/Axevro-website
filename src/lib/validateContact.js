@@ -43,6 +43,16 @@ const FAKE_LOCALS = new Set([
   'abcd',
   'xxx',
   'xyz',
+  'noreply',
+  'no-reply',
+  'admin',
+  'user',
+  'username',
+  'email',
+  'mail',
+  'demo',
+  'temp',
+  'junk',
 ])
 
 const DUMMY_PHONES = new Set([
@@ -98,10 +108,27 @@ export function validateName(raw = '') {
     }
   }
   const lower = name.toLowerCase()
-  if (['test', 'testing', 'dummy', 'asdf', 'qwerty', 'abc'].includes(lower)) {
+  if (
+    ['test', 'testing', 'dummy', 'asdf', 'qwerty', 'abc', 'fake', 'sample', 'xxx'].includes(
+      lower,
+    )
+  ) {
+    return { ok: false, error: 'Please enter your real name.' }
+  }
+  if (looksLikeGibberishName(name)) {
     return { ok: false, error: 'Please enter your real name.' }
   }
   return { ok: true, value: name }
+}
+
+function looksLikeGibberishName(name = '') {
+  const words = name.toLowerCase().split(/\s+/).filter(Boolean)
+  if (!words.length) return true
+  return words.some((word) => {
+    if (word.length < 5) return false
+    const vowels = (word.match(/[aeiou]/g) || []).length
+    return vowels / word.length < 0.15
+  })
 }
 
 export function validateEmail(raw = '') {
