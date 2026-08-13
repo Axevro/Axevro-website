@@ -13,6 +13,7 @@ import {
   validateResumeFileClient,
 } from '../lib/validateCareer'
 import { submitCareerApplication } from '../lib/submitCareer'
+import { scrollToFieldError } from '../lib/scrollToFieldError'
 
 const initialForm = {
   name: '',
@@ -85,6 +86,7 @@ export default function Careers() {
     setSuccessMessage('')
     if (!validate()) {
       toast.error('Please fix the highlighted fields.', { position: 'top-center' })
+      requestAnimationFrame(() => scrollToFieldError())
       return
     }
 
@@ -101,6 +103,7 @@ export default function Careers() {
           toast.error(result.error || 'Please fix the highlighted fields.', {
             position: 'top-center',
           })
+          requestAnimationFrame(() => scrollToFieldError())
         } else {
           toast.error(
             result.error ||
@@ -239,7 +242,7 @@ export default function Careers() {
           id="apply"
           className="scroll-mt-20 border-t border-line bg-bg-alt py-12 sm:scroll-mt-24 sm:py-16 md:py-20"
         >
-          <div className="mx-auto grid max-w-[1180px] gap-8 px-4 sm:gap-10 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 md:px-8 xl:gap-16">
+          <div className="mx-auto grid max-w-[1180px] gap-8 px-4 sm:gap-10 sm:px-6 md:px-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14 xl:gap-16">
             <div className="min-w-0">
               <p className="font-mono text-[11px] tracking-[1.4px] text-gold-deep uppercase">
                 Application
@@ -401,7 +404,11 @@ export default function Careers() {
                     name="role"
                     value={form.role}
                     onChange={updateField('role')}
-                    className={`${fieldClass('role')} bg-white`}
+                    className={`${fieldClass('role')} appearance-none bg-white bg-[length:16px] bg-[right_0.9rem_center] bg-no-repeat pr-10`}
+                    style={{
+                      backgroundImage:
+                        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7078' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\")",
+                    }}
                     required
                   >
                     <option value="">Select a role</option>
@@ -498,7 +505,7 @@ export default function Careers() {
           </div>
         </section>
 
-        <section className="border-t border-line bg-black py-12 pb-24 text-center text-white sm:py-16 sm:pb-16">
+        <section className="border-t border-line bg-black py-12 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-white sm:py-16 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-16">
           <div className="mx-auto max-w-[640px] px-4 sm:px-6">
             <h2 className="font-display text-[clamp(1.3rem,3.5vw,1.85rem)] font-semibold">
               Prefer a quick chat?

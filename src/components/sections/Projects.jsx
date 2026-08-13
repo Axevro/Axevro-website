@@ -158,7 +158,7 @@ export default function Projects() {
         >
           <Link
             to="/contact#contact"
-            className="inline-flex items-center gap-2 border border-line bg-white/80 px-5 py-2.5 text-sm font-semibold text-green-deep shadow-[0_1px_0_rgba(10,11,13,0.03)] transition-all duration-300 hover:border-gold/45 hover:text-green"
+            className="inline-flex min-h-11 items-center gap-2 border border-line bg-white/80 px-5 py-3 text-sm font-semibold text-green-deep shadow-[0_1px_0_rgba(10,11,13,0.03)] transition-all duration-300 hover:border-gold/45 hover:text-green"
           >
             Start a project like these
             <span className="material-symbols-outlined text-[16px]">arrow_forward</span>

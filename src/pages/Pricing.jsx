@@ -54,7 +54,7 @@ export default function Pricing() {
 
         {/* Trust / value strip */}
         <section className="border-b border-line bg-bg-alt py-10 sm:py-12">
-          <div className="mx-auto grid max-w-[1180px] gap-6 px-4 sm:grid-cols-2 sm:gap-8 sm:px-6 md:grid-cols-3 md:px-8">
+          <div className="mx-auto grid max-w-[1180px] gap-6 px-4 sm:grid-cols-3 sm:gap-5 sm:px-6 md:gap-8 md:px-8">
             {pricingHighlights.map((item, index) => (
               <motion.div
                 key={item.title}
@@ -321,7 +321,7 @@ export default function Pricing() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-black py-16 pb-24 text-center text-white sm:py-20 sm:pb-20 md:py-24">
+        <section className="relative overflow-hidden bg-black py-16 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-white sm:py-20 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:py-24 md:pb-24">
           <div className="pointer-events-none absolute inset-0 surface-glow opacity-90" />
           <div className="relative mx-auto max-w-[640px] px-4 sm:px-6">
             <motion.p

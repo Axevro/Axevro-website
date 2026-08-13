@@ -60,11 +60,12 @@ export default function PageHero({
           </motion.div>
         ) : null}
 
-        <div className="grid items-end gap-10 lg:grid-cols-[1.35fr_0.65fr] lg:gap-12">
+        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] lg:gap-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.06, ease: easeOut }}
+            className="min-w-0"
           >
             <div className="mb-3 flex items-center gap-2.5 font-mono text-[11px] tracking-[1.5px] text-gold-bright uppercase sm:mb-4 sm:text-xs">
               <motion.span
@@ -80,7 +81,7 @@ export default function PageHero({
               {eyebrow}
             </div>
 
-            <h1 className="font-display max-w-3xl text-[clamp(28px,7vw,54px)] leading-[1.08] font-semibold tracking-[-1.1px]">
+            <h1 className="font-display max-w-3xl break-words text-[clamp(28px,7vw,54px)] leading-[1.08] font-semibold tracking-[-1.1px]">
               {title}
               {titleAccent ? (
                 <>

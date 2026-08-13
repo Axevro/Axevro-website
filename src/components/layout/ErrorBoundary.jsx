@@ -1,5 +1,4 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -41,17 +40,18 @@ export default class ErrorBoundary extends Component {
             </button>
             <button
               type="button"
-              className="inline-flex w-full items-center justify-center border border-line px-5 py-3 text-sm font-semibold sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center border border-line px-5 py-3 text-sm font-semibold sm:w-auto"
               onClick={() => window.location.reload()}
             >
               Refresh page
             </button>
-            <Link
-              to="/contact#contact"
-              className="inline-flex w-full items-center justify-center border border-line px-5 py-3 text-sm font-semibold sm:w-auto"
+            <button
+              type="button"
+              className="inline-flex min-h-11 w-full items-center justify-center border border-line px-5 py-3 text-sm font-semibold sm:w-auto"
+              onClick={() => window.location.assign('/contact#contact')}
             >
               Contact support
-            </Link>
+            </button>
           </div>
         </div>
       )

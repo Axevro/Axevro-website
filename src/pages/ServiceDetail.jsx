@@ -40,12 +40,13 @@ export default function ServiceDetail() {
         />
 
         <section className="py-14 sm:py-16 md:py-[88px]">
-          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[1.2fr_0.8fr] md:gap-14 md:px-8">
+          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:gap-14 md:px-8">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
+              className="min-w-0"
             >
               <div className="mb-4 flex items-center gap-2.5 font-mono text-xs tracking-[1.5px] text-gold-deep uppercase">
                 <span
@@ -94,7 +95,7 @@ export default function ServiceDetail() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.08 }}
-              className="panel-soft h-fit p-6 sm:p-7 md:sticky md:top-[88px]"
+              className="panel-soft h-fit min-w-0 p-6 sm:p-7 md:sticky md:top-[88px]"
             >
               <h3 className="font-display text-lg font-semibold">How we deliver</h3>
               <ol className="mt-5 space-y-4">
@@ -177,7 +178,7 @@ export default function ServiceDetail() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-black py-14 pb-24 text-center text-white sm:py-20 sm:pb-20">
+        <section className="relative overflow-hidden bg-black py-14 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-white sm:py-20 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-20">
           <div className="pointer-events-none absolute inset-0 surface-glow opacity-80" />
           <div className="relative mx-auto max-w-[720px] px-4 sm:px-6">
             <motion.h2

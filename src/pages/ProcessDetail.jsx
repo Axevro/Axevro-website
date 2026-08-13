@@ -39,7 +39,8 @@ export default function ProcessDetail() {
               </Link>
               {next ? (
                 <Link to={`/process/${next.slug}`} className="btn-secondary-dark">
-                  Next: {next.name}
+                  <span className="sm:hidden">Next step</span>
+                  <span className="hidden sm:inline">Next: {next.name}</span>
                 </Link>
               ) : (
                 <Link to="/contact#contact" className="btn-secondary-dark">
@@ -51,12 +52,13 @@ export default function ProcessDetail() {
         />
 
         <section className="py-14 sm:py-16 md:py-[88px]">
-          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[1.15fr_0.85fr] md:gap-14 md:px-8">
+          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-14 md:px-8">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
+              className="min-w-0"
             >
               <div className="mb-4 flex items-center gap-2.5 font-mono text-xs tracking-[1.5px] text-gold-deep uppercase">
                 <span
@@ -110,7 +112,7 @@ export default function ProcessDetail() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.08 }}
-              className="panel-soft h-fit p-6 sm:p-7 md:sticky md:top-[88px]"
+              className="panel-soft h-fit min-w-0 p-6 sm:p-7 md:sticky md:top-[88px]"
             >
               <h3 className="font-display text-lg font-semibold">
                 Typical activities
@@ -150,7 +152,7 @@ export default function ProcessDetail() {
               transition={{ duration: 0.45 }}
               className="panel-soft overflow-hidden"
             >
-              <div className="grid gap-0 md:grid-cols-[1.2fr_0.8fr]">
+              <div className="grid gap-0 md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
                 <div className="border-b border-line p-5 sm:p-7 md:border-r md:border-b-0 md:p-8">
                   <div className="mb-3 flex items-center gap-2.5 font-mono text-xs tracking-[1.5px] text-gold-deep uppercase">
                     <span

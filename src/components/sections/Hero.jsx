@@ -100,9 +100,9 @@ export default function Hero() {
         </defs>
       </motion.svg>
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-64px)] max-w-[1180px] flex-col justify-center px-4 pt-20 pb-8 sm:min-h-[calc(100svh-72px)] sm:px-6 sm:pt-24 sm:pb-10 md:px-8 md:pt-28 md:pb-14">
-        <div className="grid items-center gap-10 sm:gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
-          <div className="max-w-2xl">
+      <div className="hero-viewport relative z-10 mx-auto flex min-h-[calc(100svh-64px)] max-w-[1180px] flex-col justify-center px-4 pt-16 pb-8 sm:min-h-[calc(100svh-72px)] sm:px-6 sm:pt-24 sm:pb-10 md:px-8 md:pt-28 md:pb-14">
+        <div className="grid items-center gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
+          <div className="min-w-0 max-w-2xl">
             <motion.div
               custom={0.05}
               variants={fadeUpCustom}

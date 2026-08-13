@@ -31,7 +31,7 @@ function resolveActiveMatch(pathname, hash, scrollSection) {
   if (pathname.startsWith('/careers')) return 'careers'
   if (pathname.startsWith('/contact')) return 'contact'
   if (pathname.startsWith('/services')) return 'services'
-  if (pathname.startsWith('/process')) return 'process'
+  if (pathname.startsWith('/process')) return 'services'
   if (
     pathname.startsWith('/privacy-policy') ||
     pathname.startsWith('/terms-and-conditions') ||
@@ -83,8 +83,15 @@ export default function Header() {
 
   useEffect(() => {
     if (!open) return undefined
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const closeOnDesktop = () => {
+      if (mq.matches) setOpen(false)
+    }
+    closeOnDesktop()
+    mq.addEventListener('change', closeOnDesktop)
+
     const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    if (!mq.matches) document.body.style.overflow = 'hidden'
     const onKey = (event) => {
       if (event.key === 'Escape') setOpen(false)
     }
@@ -92,6 +99,7 @@ export default function Header() {
     return () => {
       document.body.style.overflow = prev
       document.removeEventListener('keydown', onKey)
+      mq.removeEventListener('change', closeOnDesktop)
     }
   }, [open])
 
@@ -210,7 +218,7 @@ export default function Header() {
 
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-[2px] border border-line p-2 transition-colors hover:border-green/40 hover:bg-green/5 lg:hidden"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[2px] border border-line p-2.5 transition-colors hover:border-green/40 hover:bg-green/5 lg:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
@@ -230,69 +238,81 @@ export default function Header() {
 
         <AnimatePresence>
           {open && (
-            <motion.div
-              id="mobile-nav"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.28, ease: easeOut }}
-              className="relative z-10 max-h-[min(70vh,520px)] overflow-y-auto border-t border-line bg-white lg:hidden"
-            >
+            <>
+              <motion.button
+                type="button"
+                aria-label="Close menu"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-[90] bg-black/40 lg:hidden"
+                onClick={() => setOpen(false)}
+              />
               <motion.div
-                initial="hidden"
-                animate="show"
-                variants={{
-                  hidden: {},
-                  show: { transition: { staggerChildren: 0.045 } },
-                }}
-                className="flex flex-col gap-0.5 px-4 py-3 sm:px-6 sm:py-4"
+                id="mobile-nav"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.28, ease: easeOut }}
+                className="relative z-[100] max-h-[min(70vh,520px)] overflow-y-auto border-t border-line bg-white lg:hidden"
               >
-                {links.map((link) => {
-                  const active = activeMatch === link.match
-                  return (
-                    <motion.div
-                      key={link.label}
-                      variants={{
-                        hidden: { opacity: 0, x: -12 },
-                        show: { opacity: 1, x: 0 },
-                      }}
-                    >
-                      <Link
-                        to={resolveTo(link.to)}
-                        onClick={() => setOpen(false)}
-                        aria-current={active ? 'page' : undefined}
-                        className={`block rounded-[2px] px-3 py-2.5 text-[15px] font-medium transition-colors ${
-                          active
-                            ? 'bg-green/10 text-green-deep'
-                            : 'text-ink-soft hover:bg-bg-alt hover:text-green'
-                        }`}
-                      >
-                        <span className="flex items-center justify-between gap-3">
-                          {link.label}
-                          {active ? (
-                            <span className="h-1.5 w-1.5 rounded-full bg-green" />
-                          ) : null}
-                        </span>
-                      </Link>
-                    </motion.div>
-                  )
-                })}
                 <motion.div
+                  initial="hidden"
+                  animate="show"
                   variants={{
-                    hidden: { opacity: 0, y: 8 },
-                    show: { opacity: 1, y: 0 },
+                    hidden: {},
+                    show: { transition: { staggerChildren: 0.045 } },
                   }}
+                  className="flex flex-col gap-0.5 px-4 py-3 sm:px-6 sm:py-4"
                 >
-                  <Link
-                    to="/contact"
-                    onClick={() => setOpen(false)}
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-[2px] bg-black px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-green"
+                  {links.map((link) => {
+                    const active = activeMatch === link.match
+                    return (
+                      <motion.div
+                        key={link.label}
+                        variants={{
+                          hidden: { opacity: 0, x: -12 },
+                          show: { opacity: 1, x: 0 },
+                        }}
+                      >
+                        <Link
+                          to={resolveTo(link.to)}
+                          onClick={() => setOpen(false)}
+                          aria-current={active ? 'page' : undefined}
+                          className={`flex min-h-11 items-center rounded-[2px] px-3 py-3 text-[15px] font-medium transition-colors ${
+                            active
+                              ? 'bg-green/10 text-green-deep'
+                              : 'text-ink-soft hover:bg-bg-alt hover:text-green'
+                          }`}
+                        >
+                          <span className="flex w-full items-center justify-between gap-3">
+                            {link.label}
+                            {active ? (
+                              <span className="h-1.5 w-1.5 rounded-full bg-green" />
+                            ) : null}
+                          </span>
+                        </Link>
+                      </motion.div>
+                    )
+                  })}
+                  <motion.div
+                    variants={{
+                      hidden: { opacity: 0, y: 8 },
+                      show: { opacity: 1, y: 0 },
+                    }}
                   >
-                    Get a Quote
-                  </Link>
+                    <Link
+                      to="/contact"
+                      onClick={() => setOpen(false)}
+                      className="mt-2 inline-flex min-h-12 w-full items-center justify-center rounded-[2px] bg-black px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-green"
+                    >
+                      Get a Quote
+                    </Link>
+                  </motion.div>
                 </motion.div>
               </motion.div>
-            </motion.div>
+            </>
           )}
         </AnimatePresence>
       </header>

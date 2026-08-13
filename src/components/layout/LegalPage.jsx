@@ -44,13 +44,13 @@ export default function LegalPage({ page }) {
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ duration: 0.4, delay: index * 0.04 }}
                   >
-                    <h2 className="font-display text-[clamp(18px,2.5vw,24px)] font-semibold tracking-[-0.3px] text-ink">
+                    <h2 className="font-display break-words text-[clamp(18px,2.5vw,24px)] font-semibold tracking-[-0.3px] text-ink">
                       {section.heading}
                     </h2>
                     {section.body?.map((paragraph) => (
                       <p
                         key={paragraph}
-                        className="mt-3 text-[14.5px] leading-[1.75] text-gray sm:text-[15px]"
+                        className="mt-3 break-words text-[14.5px] leading-[1.75] text-gray sm:text-[15px]"
                       >
                         <LinkedText text={paragraph} />
                       </p>
@@ -95,7 +95,7 @@ export default function LegalPage({ page }) {
               </div>
             </motion.article>
 
-            <aside className="md:sticky md:top-[88px] md:self-start">
+            <aside className="min-w-0 md:sticky md:top-[88px] md:self-start">
               <div className="panel-soft p-5 sm:p-6">
                 <h3 className="font-mono text-[11px] tracking-[1px] text-gold-deep uppercase">
                   Legal pages

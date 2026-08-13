@@ -87,7 +87,7 @@ export default function PricingPreview() {
             {preview.map((row) => (
               <div
                 key={row.project}
-                className="flex items-center justify-between gap-3 px-4 py-3.5"
+                className="flex flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
               >
                 <div className="min-w-0">
                   <div className="font-display text-[14px] font-semibold leading-snug">
@@ -97,7 +97,7 @@ export default function PricingPreview() {
                     Dev {row.development} · Deploy {row.deployment}
                   </div>
                 </div>
-                <div className="shrink-0 font-mono text-[14px] font-semibold tabular-nums text-green-deep">
+                <div className="shrink-0 font-mono text-[14px] font-semibold tabular-nums text-green-deep sm:text-right">
                   {row.total}
                 </div>
               </div>

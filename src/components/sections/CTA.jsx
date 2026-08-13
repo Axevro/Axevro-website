@@ -7,7 +7,7 @@ export default function CTA() {
   return (
     <section
       id="cta"
-      className="relative overflow-hidden bg-black py-16 pb-24 text-center sm:py-24 sm:pb-24 md:py-[110px] md:pb-[110px]"
+      className="relative overflow-hidden bg-black py-16 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center sm:py-24 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:py-[110px] md:pb-[110px]"
     >
       <div
         className="pointer-events-none absolute inset-0"

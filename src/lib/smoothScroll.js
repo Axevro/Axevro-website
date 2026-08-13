@@ -1,5 +1,9 @@
-const HEADER_OFFSET = 80
 const DURATION = 380
+
+function getHeaderOffset() {
+  if (typeof window === 'undefined') return 80
+  return window.matchMedia('(min-width: 640px)').matches ? 80 : 72
+}
 
 function easeOutCubic(t) {
   return 1 - (1 - t) ** 3
@@ -11,8 +15,10 @@ let activeFrame = 0
  * Fast, smooth scroll to a Y position or element.
  * Cancels any in-flight animation to avoid jitter.
  */
-export function smoothScrollTo(target, { offset = HEADER_OFFSET, duration = DURATION } = {}) {
+export function smoothScrollTo(target, { offset, duration = DURATION } = {}) {
   if (typeof window === 'undefined') return
+
+  const resolvedOffset = offset ?? getHeaderOffset()
 
   const prefersReduced =
     window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
@@ -24,7 +30,7 @@ export function smoothScrollTo(target, { offset = HEADER_OFFSET, duration = DURA
           0,
           (target?.getBoundingClientRect?.().top ?? 0) +
             window.scrollY -
-            offset,
+            resolvedOffset,
         )
 
   if (prefersReduced || duration <= 0) {

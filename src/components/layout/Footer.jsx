@@ -134,13 +134,16 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-[1180px] flex-col gap-4 border-t border-line-dark px-4 pt-5 pb-24 text-[12.5px] leading-relaxed text-[#63676F] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3 sm:px-6 sm:pt-6 sm:pb-8 sm:text-[13px] md:px-8">
-        <div className="pr-14 sm:pr-0">© 2026 Axevro. All rights reserved.</div>
+      <div className="mx-auto flex max-w-[1180px] flex-col gap-4 border-t border-line-dark px-4 pt-5 pb-[calc(6rem+env(safe-area-inset-bottom))] text-[12.5px] leading-relaxed text-[#63676F] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3 sm:px-6 sm:pt-6 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:text-[13px] md:px-8 md:pb-10">
+        <div className="pr-14 sm:pr-28 md:pr-0">© 2026 Axevro. All rights reserved.</div>
         <nav
-          className="flex max-w-full flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:gap-y-2"
+          className="flex max-w-full flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:gap-y-2"
           aria-label="Legal"
         >
-          <Link to="/privacy-policy" className="w-fit transition-colors hover:text-white">
+          <Link
+            to="/privacy-policy"
+            className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-white"
+          >
             Privacy Policy
           </Link>
           <span className="hidden text-[#4a4e56] sm:inline" aria-hidden>
@@ -148,14 +151,17 @@ export default function Footer() {
           </span>
           <Link
             to="/terms-and-conditions"
-            className="w-fit transition-colors hover:text-white"
+            className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-white"
           >
             Terms &amp; Conditions
           </Link>
           <span className="hidden text-[#4a4e56] sm:inline" aria-hidden>
             ·
           </span>
-          <Link to="/cookies-policy" className="w-fit transition-colors hover:text-white">
+          <Link
+            to="/cookies-policy"
+            className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-white"
+          >
             Cookies Policy
           </Link>
         </nav>

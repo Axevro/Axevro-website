@@ -38,22 +38,37 @@ export default function NotFound() {
             </Link>
           </div>
           <nav
-            className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-[#9BA0A8]"
+            className="mt-10 flex flex-wrap justify-center gap-x-3 gap-y-1 text-sm text-[#9BA0A8]"
             aria-label="Helpful links"
           >
-            <Link to="/careers" className="transition-colors hover:text-gold-bright">
+            <Link
+              to="/careers"
+              className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-gold-bright"
+            >
               Careers
             </Link>
-            <Link to="/pricing" className="transition-colors hover:text-gold-bright">
+            <Link
+              to="/pricing"
+              className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-gold-bright"
+            >
               Pricing
             </Link>
-            <Link to="/#services" className="transition-colors hover:text-gold-bright">
+            <Link
+              to="/#services"
+              className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-gold-bright"
+            >
               Services
             </Link>
-            <Link to="/#portfolio" className="transition-colors hover:text-gold-bright">
+            <Link
+              to="/#portfolio"
+              className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-gold-bright"
+            >
               Portfolio
             </Link>
-            <Link to="/contact" className="transition-colors hover:text-gold-bright">
+            <Link
+              to="/contact"
+              className="inline-flex min-h-11 items-center px-2 transition-colors hover:text-gold-bright"
+            >
               Contact
             </Link>
           </nav>

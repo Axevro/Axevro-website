@@ -7,6 +7,7 @@ import { PageHero } from '../components/ui'
 import { getWhatsAppUrl } from '../data/contact'
 import { validateContactPayload } from '../lib/validateContact'
 import { submitContactForm } from '../lib/submitContact'
+import { scrollToFieldError } from '../lib/scrollToFieldError'
 
 const initialForm = {
   name: '',
@@ -46,6 +47,7 @@ export default function Contact() {
     setSuccessMessage('')
     if (!validate()) {
       toast.error('Please fix the highlighted fields.', { position: 'top-center' })
+      requestAnimationFrame(() => scrollToFieldError())
       return
     }
 
@@ -63,6 +65,7 @@ export default function Contact() {
           toast.error(result.error || 'Please fix the highlighted fields.', {
             position: 'top-center',
           })
+          requestAnimationFrame(() => scrollToFieldError())
         } else {
           toast.error(
             result.error ||
@@ -119,7 +122,7 @@ export default function Contact() {
         />
 
         <section className="border-b border-line bg-bg-alt py-8 sm:py-10">
-          <div className="mx-auto grid max-w-[1180px] gap-5 px-4 sm:grid-cols-2 sm:gap-6 sm:px-6 md:grid-cols-3 md:px-8">
+          <div className="mx-auto grid max-w-[1180px] gap-5 px-4 sm:grid-cols-3 sm:gap-4 sm:px-6 md:gap-6 md:px-8">
             {[
               {
                 icon: 'schedule',
@@ -163,12 +166,13 @@ export default function Contact() {
           id="contact"
           className="scroll-mt-24 border-t border-line bg-bg-alt/40 py-14 sm:scroll-mt-[88px] sm:py-16 md:py-[88px]"
         >
-          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[0.9fr_1.1fr] md:gap-14 md:px-8">
+          <div className="mx-auto grid max-w-[1180px] gap-10 px-4 sm:gap-12 sm:px-6 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-14 md:px-8">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
+              className="min-w-0"
             >
               <h2 className="font-display text-[clamp(24px,3vw,32px)] font-semibold tracking-[-0.5px]">
                 Prefer a direct line?
@@ -240,7 +244,7 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.08 }}
-              className="relative border border-line bg-white p-4 shadow-[0_18px_50px_rgba(10,11,13,0.06)] sm:p-6 md:p-8"
+              className="relative min-w-0 border border-line bg-white p-4 shadow-[0_18px_50px_rgba(10,11,13,0.06)] sm:p-6 md:p-8"
             >
               <div className="mb-6 border-b border-line pb-5">
                 <h3 className="font-display text-xl font-semibold">Send a message</h3>
@@ -426,7 +430,7 @@ export default function Contact() {
           </div>
         </section>
 
-        <section className="border-t border-line bg-black py-14 pb-24 text-center text-white sm:py-16 sm:pb-16">
+        <section className="border-t border-line bg-black py-14 pb-[calc(6rem+env(safe-area-inset-bottom))] text-center text-white sm:py-16 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-16">
           <div className="relative mx-auto max-w-[560px] px-4 sm:px-6">
             <h2 className="font-display text-[clamp(22px,4vw,32px)] font-semibold">
               Prefer WhatsApp?
