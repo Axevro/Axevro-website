@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /api/
 
-Sitemap: https://axevro.in/sitemap.xml
+Sitemap: https://www.axevro.in/sitemap.xml
