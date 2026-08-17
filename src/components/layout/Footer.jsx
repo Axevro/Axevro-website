@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import Logo from '../ui/Logo'
-import { getWhatsAppUrl } from '../../data/contact'
+import FooterSocialLinks from './FooterSocialLinks'
 
 const quickLinks = [
   { label: 'About Us', to: '/#about' },
@@ -109,28 +109,16 @@ export default function Footer() {
             </a>
           </div>
 
-          <div className="mt-4 flex flex-col gap-2.5 sm:mt-5">
-            <a
-              href={getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-fit max-w-full items-center gap-2 rounded-[2px] border border-[#25D366]/35 bg-[#25D366]/10 px-3.5 py-2.5 text-[13.5px] font-semibold text-[#25D366] transition-colors hover:border-[#25D366]/55 hover:bg-[#25D366]/16"
-            >
-              <span className="material-symbols-outlined text-[18px]" aria-hidden>
-                chat
-              </span>
-              WhatsApp
-            </a>
-            <Link
-              to="/contact#contact"
-              className="inline-flex w-fit max-w-full items-center gap-1.5 text-[13.5px] font-medium text-[#9BA0A8] transition-colors hover:text-green-bright"
-            >
-              Get in Touch
-              <span className="material-symbols-outlined text-[16px]" aria-hidden>
-                arrow_forward
-              </span>
-            </Link>
-          </div>
+          <FooterSocialLinks />
+          <Link
+            to="/contact#contact"
+            className="mt-3 inline-flex min-h-11 w-fit max-w-full items-center gap-1.5 text-[13.5px] font-medium text-[#9BA0A8] transition-colors hover:text-green-bright sm:mt-4"
+          >
+            Get in Touch
+            <span className="material-symbols-outlined text-[16px]" aria-hidden>
+              arrow_forward
+            </span>
+          </Link>
         </div>
       </div>
 

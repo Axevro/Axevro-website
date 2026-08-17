@@ -6,6 +6,9 @@ export const WHATSAPP_E164 = `91${WHATSAPP_PHONE}`
 export const WHATSAPP_DEFAULT_MESSAGE =
   'Hello Axevro, I would like to know more about your services and discuss a project.'
 
+export const INSTAGRAM_URL = 'https://www.instagram.com/axevro.official/'
+export const LINKEDIN_URL = 'https://www.linkedin.com/company/axevro/'
+
 export function getWhatsAppUrl(message = WHATSAPP_DEFAULT_MESSAGE) {
   return `https://wa.me/${WHATSAPP_E164}?text=${encodeURIComponent(message)}`
 }
